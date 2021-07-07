@@ -1,4 +1,4 @@
-import '@styles/globals.css';
+import GlobalStyles from '@styles/GlobalStyles';
 import type { AppProps } from 'next/app';
 import { ReactNode } from 'react';
 
@@ -8,6 +8,11 @@ type Page = AppProps['Component'] & {
 function MyApp({ Component, pageProps }: AppProps) {
   const WithLayout = (Component as Page).WithLayout ?? ((page: Page) => page);
 
-  return <>{WithLayout(<Component {...pageProps} />)}</>;
+  return (
+    <>
+      <GlobalStyles />
+      {WithLayout(<Component {...pageProps} />)}
+    </>
+  );
 }
 export default MyApp;

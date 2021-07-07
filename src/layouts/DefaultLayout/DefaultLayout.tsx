@@ -9,7 +9,11 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
   return (
     <>
       <Navbar />
-      <main className={className}>{children}</main>
+
+      <main className={className} tw="flex-1">
+        {children}
+      </main>
+
       <Footer />
     </>
   );
