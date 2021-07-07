@@ -11,6 +11,8 @@
     "cypress": "cypress open"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.4.1",
+    "clsx": "^1.1.1",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"
@@ -24,6 +26,7 @@
     "@types/react": "17.0.14",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
+    "autoprefixer": "^10.2.6",
     "babel-jest": "^27.0.6",
     "babel-plugin-macros": "^3.1.0",
     "cypress": "^7.7.0",
@@ -37,8 +40,10 @@
     "eslint-plugin-testing-library": "^4.9.0",
     "jest": "^27.0.6",
     "next-compose-plugins": "^2.2.1",
+    "postcss": "^8.3.5",
     "react-is": "^17.0.2",
     "react-test-renderer": "^17.0.2",
+    "tailwindcss": "^2.2.4",
     "ts-node": "^10.0.0",
     "typescript": "4.3.5"
   }
