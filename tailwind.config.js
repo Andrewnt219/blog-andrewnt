@@ -1,15 +1,30 @@
 const { fontFamily, colors } = require('tailwindcss/defaultTheme');
 
+const getColorFromCssVariable =
+  (cssVariableName) =>
+  ({ opacityVariable }) => {
+    const cssVariable = `var(--${cssVariableName})`;
+
+    if (opacityVariable === undefined) {
+      return `hsl(${cssVariable})`;
+    }
+
+    return `hsla(${cssVariable}, var(${opacityVariable}, 1))`;
+  };
+
 module.exports = {
   purge: [],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     colors: {
-      primary: '#006ae6',
+      primary: getColorFromCssVariable('primary'),
+      textcolor: getColorFromCssVariable('text-color'),
+      bgcolor: getColorFromCssVariable('bg-color'),
       current: 'current',
       transparent: 'transparent',
       white: '#fff',
-      black: '#000',
+      black: colors.gray[900],
+      gray: colors.gray,
     },
     extend: {
       fontFamily: {
@@ -20,7 +35,7 @@ module.exports = {
           css: {
             color: colors.gray[700],
             a: {
-              color: colors.blue[600],
+              color: theme('colors.primary'),
             },
           },
         },

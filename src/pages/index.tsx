@@ -5,23 +5,25 @@ import { FC } from 'react';
 export default function Home() {
   return (
     <>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci animi
-        quidem, numquam excepturi unde velit ea pariatur! Debitis, sint aliquid.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo rerum optio
-        voluptas molestias ratione placeat odio. In asperiores laudantium
-        eveniet.
-        <span tw="text-[#2563EB]">Read more</span>
-      </p>
+      <main tw="">
+        <button onClick={() => document.body.classList.toggle('dark')}>
+          Toggle
+        </button>
 
-      <p tw="bg-black text-white">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci animi
-        quidem, numquam excepturi unde velit ea pariatur! Debitis, sint aliquid.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo rerum optio
-        voluptas molestias ratione placeat odio. In asperiores laudantium
-        eveniet.
-        <span tw="text-[#3B82F6]">Read more</span>
-      </p>
+        <h1 tw="mt-10 text-primary text-opacity-50 text-9xl font-black bg-primary bg-opacity-10">
+          Hi
+        </h1>
+
+        <h1 tw="text-primary text-opacity-10 text-9xl font-black bg-primary bg-opacity-50">
+          Hello
+        </h1>
+
+        <p>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi culpa
+          beatae, sed soluta eius quos ratione vel dolore quia illo.
+        </p>
+        <a>Hello</a>
+      </main>
     </>
   );
 }
