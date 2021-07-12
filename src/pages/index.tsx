@@ -5,24 +5,65 @@ import { FC } from 'react';
 export default function Home() {
   return (
     <>
-      <main tw="">
-        <button onClick={() => document.body.classList.toggle('dark')}>
+      <main>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus magni
+          nisi enim earum ratione sapiente fuga recusandae porro illum vitae.
+        </p>
+        <p>
+          Lorem ipsum Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Ipsa, molestiae culpa quo quaerat corporis expedita saepe rem placeat
+          accusantium animi numquam, illum odio modi iure tempore quod autem
+          perferendis consectetur adipisci aliquid? Rerum quam voluptatem libero
+          dolor aspernatur aperiam dolorum! Magnam blanditiis amet quos officia.
+          Nobis distinctio ipsam odio suscipit.
+          <span tw="text-textmuted">
+            dolor sit amet consectetur adipisicing elit
+          </span>
+          . Blanditiis nulla ullam corrupti dolorem quae ipsa rem voluptates
+          totam neque aspernatur. Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Temporibus nisi architecto iste blanditiis quidem
+          sed deleniti quos in quisquam. Eaque sequi error fugiat laboriosam
+          voluptatibus?
+        </p>
+
+        <a tw="font-medium text-primary underline cursor-pointer hover:text-primarymuted">
+          Hello
+        </a>
+
+        <button
+          tw="ml-10 p-2 bg-bgmuted text-textcolor font-medium"
+          onClick={() => document.body.classList.toggle('dark')}
+        >
           Toggle
         </button>
 
-        <h1 tw="mt-10 text-primary text-opacity-50 text-9xl font-black bg-primary bg-opacity-10">
-          Hi
-        </h1>
-
-        <h1 tw="text-primary text-opacity-10 text-9xl font-black bg-primary bg-opacity-50">
-          Hello
-        </h1>
-
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi culpa
-          beatae, sed soluta eius quos ratione vel dolore quia illo.
-        </p>
-        <a>Hello</a>
+        <div tw="flex flex-col items-center gap-3 border m-10 p-10 rounded">
+          <button tw="p-2 bg-bgmuted ">
+            <span tw="text-primary">Bg Muted - Text Primary</span>
+          </button>
+          <button tw="p-2 bg-bgmuted ">
+            <span tw="text-primarymuted">Bg Muted - Text Primary Muted</span>
+          </button>
+          <button tw="p-2 bg-bgcolor">
+            <span tw="text-primarymuted">Bg default- Text Primary Muted</span>
+          </button>
+          <button tw="p-2 bg-bgcolor ">
+            <span tw="text-primary">Bg default- Text Primary</span>
+          </button>
+          <button tw="p-2 bg-bgcolor ">
+            <span tw="text-textcolor">Bg default- Text default</span>
+          </button>
+          <button tw="p-2 bg-bgcolor ">
+            <span tw="text-textmuted">Bg default- Text muted</span>
+          </button>
+          <button tw="p-2 bg-bgmuted ">
+            <span tw="text-textcolor">Bg muted- Text default</span>
+          </button>
+          <button tw="p-2 bg-bgmuted ">
+            <span tw="text-textmuted">Bg muted- Text muted</span>
+          </button>
+        </div>
       </main>
     </>
   );
