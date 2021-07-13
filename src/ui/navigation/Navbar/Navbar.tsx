@@ -1,4 +1,5 @@
 import ColorThemeButton from '@ui/ColorThemeButton/ColorThemeButton';
+import LogoText from '@ui/LogoText/LogoText';
 
 type Props = {
   className?: string;
@@ -6,6 +7,8 @@ type Props = {
 const Navbar = ({ className }: Props) => {
   return (
     <header className={className}>
+      <LogoText tw="text-xl" />
+
       <nav></nav>
 
       <ColorThemeButton />
