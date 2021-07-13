@@ -53,7 +53,7 @@ export const Button = styled.button<Props>`
 type ButtonLinkProps = {
   size?: Size;
 };
-export const ButtonLink = styled.button<ButtonLinkProps>`
+export const ButtonLink = styled.a<ButtonLinkProps>`
   ${commonStyle}
   ${variantsStyle('text')}
   ${(p) => sizeStyle(p.size)}

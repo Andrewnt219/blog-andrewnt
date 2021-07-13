@@ -5,11 +5,12 @@ type Props = {
 const Logo = ({ className }: Props) => {
   return (
     <NextLink href="/" passHref>
-      <a className={className} tw="block">
+      <a className={className} tw="inline-block">
         <span tw="sr-only">
           The logo of the website with a mono-colored square background and a
           letter &quot;A&quot; in the middle{' '}
         </span>
+
         <svg
           tw="aspect-w-1 aspect-h-1"
           viewBox="0 0 115 115"
