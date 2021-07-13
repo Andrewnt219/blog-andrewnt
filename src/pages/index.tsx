@@ -32,35 +32,35 @@ export default function Home() {
         </a>
 
         <button
-          tw="ml-10 p-2 bg-bgmuted text-textcolor font-medium"
+          tw="ml-xl p-sm bg-bgmuted text-textcolor font-medium"
           onClick={() => document.body.classList.toggle('dark')}
         >
           Toggle
         </button>
 
-        <div tw="flex flex-col items-center gap-3 border m-10 p-10 rounded">
-          <button tw="p-2 bg-bgmuted ">
+        <div tw="flex flex-col items-center gap-lg border m-xl p-xl rounded">
+          <button tw="p-sm rounded bg-bgmuted ">
             <span tw="text-primary">Bg Muted - Text Primary</span>
           </button>
-          <button tw="p-2 bg-bgmuted ">
+          <button tw="p-sm rounded bg-bgmuted ">
             <span tw="text-primarymuted">Bg Muted - Text Primary Muted</span>
           </button>
-          <button tw="p-2 bg-bgcolor">
+          <button tw="p-sm rounded bg-bgcolor">
             <span tw="text-primarymuted">Bg default- Text Primary Muted</span>
           </button>
-          <button tw="p-2 bg-bgcolor ">
+          <button tw="p-sm rounded bg-bgcolor ">
             <span tw="text-primary">Bg default- Text Primary</span>
           </button>
-          <button tw="p-2 bg-bgcolor ">
+          <button tw="p-sm rounded bg-bgcolor ">
             <span tw="text-textcolor">Bg default- Text default</span>
           </button>
-          <button tw="p-2 bg-bgcolor ">
+          <button tw="p-sm rounded bg-bgcolor ">
             <span tw="text-textmuted">Bg default- Text muted</span>
           </button>
-          <button tw="p-2 bg-bgmuted ">
+          <button tw="p-sm rounded bg-bgmuted ">
             <span tw="text-textcolor">Bg muted- Text default</span>
           </button>
-          <button tw="p-2 bg-bgmuted ">
+          <button tw="p-sm rounded bg-bgmuted ">
             <span tw="text-textmuted">Bg muted- Text muted</span>
           </button>
         </div>

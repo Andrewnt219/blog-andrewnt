@@ -1,3 +1,4 @@
+import ColorThemeScript from '@modules/color-theme/ColorThemeScript';
 import Document, {
   DocumentContext,
   Head,
@@ -49,6 +50,7 @@ class MyDocument extends Document {
           />
         </Head>
         <body>
+          <ColorThemeScript />
           <Main />
           <NextScript />
         </body>
