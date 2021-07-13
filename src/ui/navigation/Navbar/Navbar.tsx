@@ -10,7 +10,7 @@ const Navbar = ({ className }: Props) => {
   return (
     <header
       className={className}
-      tw=" py-sm bg-bgmuted bg-opacity-60 sticky top-0 backdrop-filter backdrop-blur-lg backdrop-saturate-[180%]"
+      tw="py-sm bg-bgcolor bg-opacity-60 sticky top-0 backdrop-filter backdrop-blur-lg backdrop-saturate-[180%]"
     >
       <div tw="flex items-center gap-lg max-w-7xl mx-auto">
         <Logo tw="w-14 h-14" />

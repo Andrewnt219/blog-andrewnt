@@ -10,7 +10,7 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
     <>
       <Navbar />
 
-      <main className={className} tw="flex-1">
+      <main className={className} tw="flex-1 mt-lg max-w-prose mx-auto">
         {children}
       </main>
 

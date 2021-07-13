@@ -11,11 +11,7 @@ const Logo = ({ className }: Props) => {
           letter &quot;A&quot; in the middle{' '}
         </span>
 
-        <svg
-          tw="aspect-w-1 aspect-h-1"
-          viewBox="0 0 115 115"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg">
           <rect height="100%" width="100%" rx="4" fill="hsl(var(--primary))" />
           <path
             d="M52.3806 15.8071C52.556 15.4045 52.9735 15.1634 53.4099 15.2128L81.5245 18.3959C82.483 18.5045 82.7474 19.7733 81.912 20.2556L62.2044 31.6338L42.4967 43.012C41.6613 43.4944 40.6947 42.631 41.0799 41.7466L52.3806 15.8071Z"
