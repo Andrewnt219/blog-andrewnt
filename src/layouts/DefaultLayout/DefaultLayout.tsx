@@ -8,13 +8,16 @@ type Props = {
 function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
   return (
     <>
-      <Navbar />
+      <Navbar tw="px-2xl" />
 
-      <main className={className} tw="flex-1 mt-lg max-w-prose mx-auto">
+      <main
+        className={className}
+        tw="flex-1 mt-2xl mb-4xl max-w-prose mx-auto px-2xl"
+      >
         {children}
       </main>
 
-      <Footer />
+      <Footer tw="px-2xl" />
     </>
   );
 }
