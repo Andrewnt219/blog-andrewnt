@@ -10,12 +10,12 @@ const Navbar = ({ className }: Props) => {
   return (
     <header
       className={className}
-      tw="py-sm bg-bgcolor bg-opacity-60 sticky top-0 backdrop-filter backdrop-blur-lg backdrop-saturate-[180%]"
+      tw="p-sm bg-bgcolor bg-opacity-60 sticky top-0 backdrop-filter backdrop-blur-lg backdrop-saturate-[180%]"
     >
       <div tw="flex items-center gap-lg max-w-7xl mx-auto">
-        <Logo tw="w-14 h-14" />
+        <Logo tw="w-12 md:w-14" />
 
-        <LogoText tw="w-48" />
+        <LogoText tw="hidden md:(inline-block w-48)" />
 
         <nav tw="ml-auto">
           <ul tw="flex">

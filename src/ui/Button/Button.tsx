@@ -6,13 +6,13 @@ type Size = 'sm' | 'md' | 'lg';
 const sizeStyle = (size: Size | undefined) => {
   switch (size) {
     case 'lg':
-      return tw`px-lg py-md`;
+      return tw`py-md px-xl md:(px-2xl)`;
 
     case 'md':
-      return tw`px-md py-sm`;
+      return tw`py-sm px-sm md:(px-md)`;
 
     case 'sm':
-      return tw`px-sm py-xs`;
+      return tw`py-xs px-sm`;
 
     default:
       return tw``;

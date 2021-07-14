@@ -25,7 +25,7 @@ const ColorThemeButton = ({ className }: Props) => {
   return (
     <Button
       variant="contained"
-      size="lg"
+      size="md"
       className={className}
       tw=""
       onClick={handleButtonClick}
