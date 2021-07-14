@@ -2,7 +2,7 @@ import tw, { styled } from 'twin.macro';
 
 const commonStyle = tw`border border-transparent font-medium rounded outline-none! focus-visible:(ring-2 ring-textcolor) active:(ring-2 ring-textcolor)`;
 
-type Size = 'sm' | 'md' | 'lg';
+type Size = 'sm' | 'md' | 'lg' | 'even';
 const sizeStyle = (size: Size | undefined) => {
   switch (size) {
     case 'lg':
