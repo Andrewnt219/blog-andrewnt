@@ -10,9 +10,10 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
     <>
       <Navbar tw="px-2xl" />
 
+      {/* w-full so main is left aligned even without content */}
       <main
         className={className}
-        tw="flex-1 mt-2xl mb-4xl max-w-4xl mx-auto px-2xl"
+        tw="flex-1 w-full mt-2xl mb-4xl max-w-4xl mx-auto px-2xl"
       >
         {children}
       </main>
