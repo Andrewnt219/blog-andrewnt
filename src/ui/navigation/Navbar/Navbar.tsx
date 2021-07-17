@@ -20,7 +20,13 @@ const Navbar = ({ className }: Props) => {
         <nav tw="ml-auto">
           <ul tw="flex">
             <li>
-              <ButtonLink href="https://andrewnt.dev/">Portfolio</ButtonLink>
+              <ButtonLink
+                target="_blank"
+                rel="noreferrer noopener"
+                href="https://andrewnt.dev/"
+              >
+                Portfolio
+              </ButtonLink>
             </li>
           </ul>
         </nav>

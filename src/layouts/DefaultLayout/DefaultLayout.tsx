@@ -12,12 +12,12 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
 
       <main
         className={className}
-        tw="flex-1 mt-2xl mb-4xl max-w-prose mx-auto px-2xl"
+        tw="flex-1 mt-2xl mb-4xl max-w-4xl mx-auto px-2xl"
       >
         {children}
       </main>
 
-      <Footer tw="px-2xl" />
+      <Footer tw="all-child:(max-w-4xl px-2xl)" />
     </>
   );
 }
