@@ -1,8 +1,8 @@
-import { JustFields } from '$common';
+import { JustFields, Objectable } from '$common';
 import { convertInstanceToObject } from '@utils/convert-js-utils';
 
 export type PostMetaDocument = JustFields<PostMeta>;
-export class PostMeta {
+export class PostMeta implements Objectable {
   static readonly TABLE_NAME = 'post_meta';
   view_count = 1;
   like_count = 0;
