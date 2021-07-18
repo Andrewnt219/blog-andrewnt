@@ -18,11 +18,11 @@ declare module '$common' {
     ? ThenArgRecursive<U>
     : T;
 
-  type FrontMatter = {
-    title: string;
-  };
-
   type MdxSource = ThenArgRecursive<ReturnType<typeof serialize>>;
 
   type WithLayout = (page: ReactNode) => ReactNode;
+
+  interface Objectable {
+    getObject(): JustFields;
+  }
 }
