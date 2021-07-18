@@ -1,23 +1,32 @@
-import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
-import axios from 'axios';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import fireStore from 'src/lib/firebase/firestore';
+import { PostMeta, PostMetaDocument } from './PostMeta';
 
 export class PostService {
-  static readonly fetcher = axios.create({ baseURL: '/api/post' });
+  static readonly COLLECTION_NAME = 'post_meta';
+  static readonly db = fireStore;
 
-  static async increaseViewCount(post_id: string) {
-    const { data } =
-      await PostService.fetcher.patch<ApiPostIncreaseViewCountResult>(
-        '/increaseViewCount',
-        { post_id }
-      );
-
-    return data;
+  static getPostMetaRef(post_id: string) {
+    return doc(PostService.db, PostService.COLLECTION_NAME, post_id);
   }
-}
+  static async getPostMeta(post_id: string) {
+    const postMetaRef = PostService.getPostMetaRef(post_id);
+    const postMeta = await getDoc(postMetaRef);
 
-export class PostMeta {
-  static readonly TABLE_NAME = 'post_meta';
-  view_count = 0;
-  like_count = 0;
-  post_id = '';
+    if (!postMeta.exists()) return null;
+
+    return PostMeta.fromPostMetaDocument(postMeta.data() as PostMetaDocument);
+  }
+
+  static async addPostMeta(postMeta: PostMeta) {
+    await setDoc(
+      doc(fireStore, 'post_meta', postMeta.post_id),
+      postMeta.getObject()
+    );
+  }
+
+  static async updatePostMeta(postMeta: PostMeta) {
+    const postMetaRef = PostService.getPostMetaRef(postMeta.post_id);
+    await updateDoc(postMetaRef, postMeta.getObject());
+  }
 }
