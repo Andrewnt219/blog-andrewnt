@@ -8,7 +8,7 @@ export type HttpMethodHandlers = Partial<Record<HttpMethod, ApiHandler>>;
 type HttpMethodHandlerSelector = (handlers: HttpMethodHandlers) => ApiHandler;
 
 export const withHttpMethodHandler: HttpMethodHandlerSelector =
-  (handlers) => (req, res) => {
+  (handlers) => async (req, res) => {
     const httpMethod = req.method?.toLowerCase() ?? '';
     if (!(httpMethod in handlers)) {
       return res.status(405).json(new ResultError('Invalid http method'));
@@ -21,7 +21,11 @@ export const withHttpMethodHandler: HttpMethodHandlerSelector =
         .json(new ResultError(`${httpMethod} not supported`));
     }
 
-    return handle(req, res);
+    try {
+      return await Promise.resolve(handle(req, res));
+    } catch (error) {
+      return handleApiError(req, res, error);
+    }
   };
 
 export const handleApiError = (
