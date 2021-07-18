@@ -13,6 +13,6 @@ if (getApps().length === 0)
     measurementId: process.env['NEXT_PUBLIC_MEASUREMENT_ID'],
   });
 
-const fireStore = getFirestore();
+const clientDb = getFirestore();
 
-export default fireStore;
+export default clientDb;

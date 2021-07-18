@@ -1,32 +1,30 @@
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import fireStore from 'src/lib/firebase/firestore';
+import adminDb from '@lib/firebase/firestore-admin';
 import { PostMeta, PostMetaDocument } from './PostMeta';
 
 export class PostService {
-  static readonly COLLECTION_NAME = 'post_meta';
-  static readonly db = fireStore;
+  static readonly collection = adminDb.collection('post_meta');
 
   static getPostMetaRef(post_id: string) {
-    return doc(PostService.db, PostService.COLLECTION_NAME, post_id);
+    return PostService.collection.doc(post_id);
   }
   static async getPostMeta(post_id: string) {
     const postMetaRef = PostService.getPostMetaRef(post_id);
-    const postMeta = await getDoc(postMetaRef);
+    const postMetaSnapshot = await postMetaRef.get();
 
-    if (!postMeta.exists()) return null;
+    if (!postMetaSnapshot.exists) return null;
 
-    return PostMeta.fromPostMetaDocument(postMeta.data() as PostMetaDocument);
+    return PostMeta.fromPostMetaDocument(
+      postMetaSnapshot.data() as PostMetaDocument
+    );
   }
 
   static async addPostMeta(postMeta: PostMeta) {
-    await setDoc(
-      doc(fireStore, 'post_meta', postMeta.post_id),
-      postMeta.getObject()
-    );
+    const postMetaRef = PostService.getPostMetaRef(postMeta.post_id);
+    await postMetaRef.set(postMeta.getObject());
   }
 
   static async updatePostMeta(postMeta: PostMeta) {
     const postMetaRef = PostService.getPostMetaRef(postMeta.post_id);
-    await updateDoc(postMetaRef, postMeta.getObject());
+    await postMetaRef.update(postMeta.getObject());
   }
 }

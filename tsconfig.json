@@ -22,13 +22,16 @@
     "noPropertyAccessFromIndexSignature": true,
     "baseUrl": ".",
     "paths": {
-      "@public/*": ["public/*"],
+      "@api/*": ["src/pages/api/*"],
+      "@pages/*": ["src/pages/*"],
+      "@lib/*": ["src/lib/*"],
       "@utils/*": ["src/utils/*"],
       "@modules/*": ["src/modules/*"],
       "@ui/*": ["src/ui/*"],
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"],
-      "@pages/*": ["src/pages/*"]
+      "@public/*": ["public/*"],
+      "@root/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "twin.d.ts"],
