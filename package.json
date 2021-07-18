@@ -11,8 +11,10 @@
     "cypress": "cypress open"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.19.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@tailwindcss/typography": "^0.4.1",
+    "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "framer-motion": "^4.1.17",
     "gray-matter": "^4.0.3",
