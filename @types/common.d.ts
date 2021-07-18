@@ -1,5 +1,6 @@
 declare module '$common' {
   import type { serialize } from 'next-mdx-remote/serialize';
+  import { ReactNode } from 'react';
 
   type JustMethodKeys<T> = {
     [P in keyof T]: T[P] extends () => void ? P : never;
@@ -22,4 +23,6 @@ declare module '$common' {
   };
 
   type MdxSource = ThenArgRecursive<ReturnType<typeof serialize>>;
+
+  type WithLayout = (page: ReactNode) => ReactNode;
 }

@@ -1,6 +1,4 @@
-import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
-import { AppProps } from 'next/app';
-import { FC } from 'react';
+import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
 
 type Props = {
   className?: string;
@@ -13,8 +11,6 @@ function NotFound({ className }: Props) {
   );
 }
 
-NotFound.WithLayout = ((page: AppProps['Component']) => (
-  <DefaultLayout>{page}</DefaultLayout>
-)) as FC;
+NotFound.WithLayout = WithDefaultLayout;
 
 export default NotFound;

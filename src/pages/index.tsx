@@ -1,6 +1,4 @@
-import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
-import { AppProps } from 'next/dist/next-server/lib/router/router';
-import { FC } from 'react';
+import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
 
 export default function Home() {
   return (
@@ -11,6 +9,4 @@ export default function Home() {
   );
 }
 
-Home.WithLayout = ((page: AppProps['Component']) => (
-  <DefaultLayout>{page}</DefaultLayout>
-)) as FC;
+Home.WithLayout = WithDefaultLayout;

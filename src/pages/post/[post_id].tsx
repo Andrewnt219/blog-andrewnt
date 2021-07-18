@@ -1,13 +1,17 @@
 import { FrontMatter, MdxSource } from '$common';
+import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
 import { getAllPosts, getPostbySlug } from '@modules/mdx/mdx-utils';
 import Post from '@modules/post/Post/Post';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import { VFC } from 'react';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps> & {
   className?: string;
 };
-const PostIdPage: VFC<Props> = ({ className, mdxSource, frontMatter }) => {
+export default function PostIdPage({
+  className,
+  mdxSource,
+  frontMatter,
+}: Props) {
   if (!mdxSource) return <h1>Loading</h1>;
 
   return (
@@ -15,7 +19,7 @@ const PostIdPage: VFC<Props> = ({ className, mdxSource, frontMatter }) => {
       <Post mdxSource={mdxSource} />
     </div>
   );
-};
+}
 /* -------------------------------------------------------------------------- */
 type StaticProps = {
   mdxSource: MdxSource;
@@ -51,4 +55,4 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-export default PostIdPage;
+PostIdPage.WithLayout = WithDefaultLayout;
