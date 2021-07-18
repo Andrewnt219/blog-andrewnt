@@ -21,11 +21,7 @@ export const withHttpMethodHandler: HttpMethodHandlerSelector =
         .json(new ResultError(`${httpMethod} not supported`));
     }
 
-    try {
-      return handle(req, res);
-    } catch (err) {
-      return handleApiError(req, res, err);
-    }
+    return handle(req, res);
   };
 
 export const handleApiError = (

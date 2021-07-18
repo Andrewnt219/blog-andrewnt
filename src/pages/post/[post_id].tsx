@@ -23,13 +23,13 @@ type StaticProps = {
 };
 
 type Params = {
-  postSlug: string;
+  post_id: string;
 };
 
 export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
   params,
 }) => {
-  const { mdxSource, frontMatter } = await getPostbySlug(params!.postSlug);
+  const { mdxSource, frontMatter } = await getPostbySlug(params!.post_id);
 
   return {
     props: {
@@ -43,7 +43,7 @@ export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const posts = getAllPosts();
   const paths = posts.map((post) => ({
-    params: { postSlug: post.replace('.mdx', '') },
+    params: { post_id: post.replace('.mdx', '') },
   }));
   return {
     paths,
