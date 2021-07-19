@@ -1,4 +1,3 @@
-import { slugify } from '@utils/convert-js-utils';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -40,7 +39,7 @@ export async function getPostDataBySlug(postSlug: string): Promise<PostData> {
   assertFrontMatter(data);
 
   const mdxSource = await serialize(content, { scope: data });
-  const meta = await getPostMeta(slugify(data.title));
+  const meta = await getPostMeta(postSlug);
 
   return {
     content: mdxSource,
