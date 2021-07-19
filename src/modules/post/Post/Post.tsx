@@ -1,4 +1,3 @@
-import { MdxSource } from '$common';
 import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/MdxComponents/MdxComponents';
 import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
@@ -6,26 +5,29 @@ import axios from 'axios';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
+import { PostData } from '../PostData';
 
 type Props = {
-  mdxSource: MdxSource;
+  post: PostData;
 };
-const Post: React.VFC<Props> = ({ mdxSource }) => {
+const Post: React.VFC<Props> = ({ post }) => {
+  const { post_id } = post.meta;
+
   useEffect(() => {
     // TODO #2 add error modal and loading state
     axios
       .patch<ApiPostIncreaseViewCountResult>('/api/post/increaseViewCount', {
-        post_id: 'hello-world',
+        post_id,
       })
-      .then((data) => console.log(data.data))
+      .then((res) => console.log(res.data.data.view_count))
       .catch((err) => console.error(getErrorMessage(err)));
-  }, []);
+  }, [post_id]);
 
   return (
     <>
-      <header></header>
+      <header>{post.meta.view_count}</header>
       <main>
-        <MDXRemote {...mdxSource} components={MdxComponents} />
+        <MDXRemote {...post.content} components={MdxComponents} />
       </main>
     </>
   );

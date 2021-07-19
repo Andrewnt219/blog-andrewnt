@@ -1,30 +1,29 @@
-import { FrontMatter, MdxSource } from '$common';
 import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
-import { getAllPosts, getPostbySlug } from '@modules/mdx/mdx-utils';
+import { Result } from '@modules/api/api-results';
 import Post from '@modules/post/Post/Post';
+import { PostData } from '@modules/post/PostData';
+import { PostService } from '@modules/post/PostService';
+import {
+  createStaticProps,
+  createStaticPropsError,
+} from '@utils/convert-js-utils';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps> & {
   className?: string;
 };
-export default function PostIdPage({
-  className,
-  mdxSource,
-  frontMatter,
-}: Props) {
-  if (!mdxSource) return <h1>Loading</h1>;
+export default function PostIdPage({ className, data, error }: Props) {
+  if (error) return <h1>Fail to load post</h1>;
+  if (!data) return <h1>Loading</h1>;
 
   return (
     <div className={className} tw="">
-      <Post mdxSource={mdxSource} />
+      <Post post={data} />
     </div>
   );
 }
 /* -------------------------------------------------------------------------- */
-type StaticProps = {
-  mdxSource: MdxSource;
-  frontMatter: FrontMatter;
-};
+type StaticProps = Result<PostData>;
 
 type Params = {
   post_id: string;
@@ -33,21 +32,18 @@ type Params = {
 export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
   params,
 }) => {
-  const { mdxSource, frontMatter } = await getPostbySlug(params!.post_id);
+  if (!params) return createStaticPropsError('Invalid params');
 
-  return {
-    props: {
-      mdxSource,
-      frontMatter,
-    },
-  };
+  const postData = await PostService.getPostbySlug(params.post_id);
+
+  return createStaticProps({ ...postData });
 };
 
 /* -------------------------------------------------------------------------- */
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const posts = getAllPosts();
-  const paths = posts.map((post) => ({
-    params: { post_id: post.replace('.mdx', '') },
+  const postNames = PostService.getAllPostNames();
+  const paths = postNames.map((name) => ({
+    params: { post_id: name.replace('.mdx', '') },
   }));
   return {
     paths,

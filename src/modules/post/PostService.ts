@@ -1,9 +1,11 @@
 import adminDb from '@lib/firebase/firestore-admin';
+import { slugify } from '@utils/convert-js-utils';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
 import { assertFrontMatter } from './post-utils';
+import { PostData } from './PostData';
 import { PostMeta, PostMetaDocument } from './PostMeta';
 
 export class PostService {
@@ -19,7 +21,12 @@ export class PostService {
     const postMetaRef = PostService.getPostMetaRef(post_id);
     const postMetaSnapshot = await postMetaRef.get();
 
-    if (!postMetaSnapshot.exists) return null;
+    if (!postMetaSnapshot.exists) {
+      const postMeta = new PostMeta(post_id);
+      PostService.addPostMeta(postMeta);
+
+      return postMeta;
+    }
 
     return PostMeta.fromPostMetaDocument(
       postMetaSnapshot.data() as PostMetaDocument
@@ -40,11 +47,11 @@ export class PostService {
 
   //#region posts (files)
 
-  static getAllPosts() {
+  static getAllPostNames() {
     return fs.readdirSync(PostService.BLOG_PATH);
   }
 
-  static async getPostbySlug(postSlug: string) {
+  static async getPostbySlug(postSlug: string): Promise<PostData> {
     const pathToPost = PostService.getPostPathBySlug(postSlug);
     const source = fs.readFileSync(pathToPost, 'utf-8');
 
@@ -52,8 +59,9 @@ export class PostService {
     assertFrontMatter(data);
 
     const mdxSource = await serialize(content, { scope: data });
+    const postMeta = await PostService.getPostMeta(slugify(data.title));
 
-    return { mdxSource, frontMatter: data };
+    return new PostData(mdxSource, postMeta, data);
   }
 
   static async getLatestPosts(options: GetFilesOptions) {
