@@ -1,11 +1,4 @@
-export type FrontMatter = {
-  title: string;
-  description: string;
-  thumbnail: string;
-  publishedOn: string;
-  isPublished: boolean;
-  layout: string;
-};
+import { FrontMatter } from './post-data-service';
 
 export function initFrontMatter(): FrontMatter {
   return {

@@ -4,11 +4,20 @@ import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
-import { assertFrontMatter, FrontMatter } from './FrontMatter';
 import { getPostMeta, PostMeta } from './post-meta-service';
+import { assertFrontMatter } from './post-utils';
 
 type GetFilesOptions = {
   limit: number;
+};
+
+export type FrontMatter = {
+  title: string;
+  description: string;
+  thumbnail: string;
+  publishedOn: string;
+  isPublished: boolean;
+  layout: string;
 };
 export type PostData = {
   meta: PostMeta;
