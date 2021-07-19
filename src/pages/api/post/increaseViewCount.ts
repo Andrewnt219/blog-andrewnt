@@ -1,5 +1,9 @@
-import { Result, ResultError, ResultSuccess } from '@modules/api/api-results';
-import { withHttpMethodHandler } from '@modules/api/api-utils';
+import { Result, ResultSuccess } from '$common';
+import {
+  createResultError,
+  createResultSuccess,
+  withHttpMethodHandler,
+} from '@modules/api/api-utils';
 import { PostMeta } from '@modules/post/PostMeta';
 import { PostService } from '@modules/post/PostService';
 import { NextApiHandler } from 'next';
@@ -10,7 +14,7 @@ const patch: NextApiHandler<Result<Data>> = async (req, res) => {
   const { post_id } = req.body;
 
   if (!post_id || typeof post_id !== 'string')
-    return res.status(422).json(new ResultError('Invalid post_id'));
+    return res.status(422).json(createResultError('Invalid post_id'));
 
   const postMeta = await PostService.getPostMeta(post_id);
 
@@ -20,7 +24,7 @@ const patch: NextApiHandler<Result<Data>> = async (req, res) => {
 
     return res
       .status(201)
-      .json(new ResultSuccess({ view_count: postMeta.view_count }));
+      .json(createResultSuccess({ view_count: postMeta.view_count }));
   }
 
   postMeta.increaseViewCount();
@@ -28,7 +32,7 @@ const patch: NextApiHandler<Result<Data>> = async (req, res) => {
 
   return res
     .status(200)
-    .json(new ResultSuccess({ view_count: postMeta.view_count }));
+    .json(createResultSuccess({ view_count: postMeta.view_count }));
 };
 
 export default withHttpMethodHandler({ patch });

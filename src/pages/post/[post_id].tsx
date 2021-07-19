@@ -1,12 +1,12 @@
+import { Result } from '$common';
 import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
-import { Result } from '@modules/api/api-results';
-import Post from '@modules/post/Post/Post';
-import { PostData } from '@modules/post/PostData';
-import { PostService } from '@modules/post/PostService';
 import {
   createStaticProps,
   createStaticPropsError,
-} from '@utils/convert-js-utils';
+} from '@modules/api/api-utils';
+import Post from '@modules/post/Post/Post';
+import { PostData } from '@modules/post/PostData';
+import { PostService } from '@modules/post/PostService';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps> & {
@@ -50,5 +50,4 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     fallback: false,
   };
 };
-
 PostIdPage.WithLayout = WithDefaultLayout;

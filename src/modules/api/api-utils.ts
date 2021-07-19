@@ -1,6 +1,11 @@
+import { Result, ResultError, ResultPending, ResultSuccess } from '$common';
 import axios, { AxiosError } from 'axios';
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { Result, ResultError } from './api-results';
+import type {
+  GetStaticPropsResult,
+  NextApiHandler,
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
 
 type ApiHandler = NextApiHandler<Result>;
 export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
@@ -11,14 +16,14 @@ export const withHttpMethodHandler: HttpMethodHandlerSelector =
   (handlers) => async (req, res) => {
     const httpMethod = req.method?.toLowerCase() ?? '';
     if (!(httpMethod in handlers)) {
-      return res.status(405).json(new ResultError('Invalid http method'));
+      return res.status(405).json(createResultError('Invalid http method'));
     }
 
     const handle = handlers[httpMethod as HttpMethod];
     if (!handle) {
       return res
         .status(405)
-        .json(new ResultError(`${httpMethod} not supported`));
+        .json(createResultError(`${httpMethod} not supported`));
     }
 
     try {
@@ -34,17 +39,25 @@ export const handleApiError = (
   err: unknown
 ) => {
   console.error(err);
-  return res.status(500).json(new ResultError('Something went wrong'));
+  return res.status(500).json(createResultError('Something went wrong'));
 };
 
 export function getErrorMessage(error: unknown): string | null {
   if (axios.isAxiosError(error)) return getAxiosError(error);
 
-  if (error instanceof ResultError) return error.error.message;
-
   if (error instanceof Error) return error.message;
 
+  if (isResultError(error)) return error.error.message;
+
   return null;
+}
+
+export function isResultError(error: unknown): error is ResultError {
+  if (typeof error !== 'object') return false;
+
+  if (!error) return false;
+
+  return 'message' in error;
 }
 
 export function getAxiosError(error: AxiosError<ResultError>): string | null {
@@ -53,4 +66,60 @@ export function getAxiosError(error: AxiosError<ResultError>): string | null {
   if (error.response) return error.response.data.error.message;
 
   return null;
+}
+
+export function createResultError(message: string): ResultError {
+  return {
+    type: 'error',
+    data: null,
+    error: { message },
+    timestamp: new Date().toISOString(),
+  };
+}
+
+export function createResultSuccess<Data = unknown>(
+  data: Data
+): ResultSuccess<Data> {
+  return {
+    type: 'success',
+    data,
+    error: null,
+    timestamp: new Date().toISOString(),
+  };
+}
+
+export function creatResultPending<Data = unknown>(
+  initialData?: Data
+): ResultPending<Data> {
+  return {
+    type: 'pending',
+    data: initialData ?? null,
+    error: null,
+  };
+}
+
+export function createStaticPropsError(
+  message: string
+): GetStaticPropsResult<ResultError> {
+  return {
+    revalidate: 60,
+    props: createResultError(message),
+  };
+}
+
+export function createStaticProps<Data>(
+  data: Data
+): GetStaticPropsResult<ResultSuccess<Data>> {
+  return {
+    revalidate: 60,
+    props: createResultSuccess(data),
+  };
+}
+
+export function handleStaticPropsError(
+  error: unknown
+): GetStaticPropsResult<ResultError> {
+  console.error(error);
+
+  return createStaticPropsError('Something went wrong');
 }

@@ -25,4 +25,31 @@ declare module '$common' {
   interface Objectable {
     getObject(): JustFields;
   }
+
+  type ErrorWithMessage = { message: string };
+
+  type Result<Data = unknown> =
+    | ResultSuccess<Data>
+    | ResultError
+    | ResultPending;
+
+  type ResultSuccess<Data> = {
+    type: 'success';
+    data: Data;
+    error: null;
+    timestamp: string;
+  };
+
+  type ResultError = {
+    type: 'error';
+    data: null;
+    error: ErrorWithMessage;
+    timestamp: string;
+  };
+
+  type ResultPending<Data = null> = {
+    type: 'pending';
+    data: Data | null;
+    error: null;
+  };
 }
