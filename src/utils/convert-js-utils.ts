@@ -1,6 +1,6 @@
 import { JustFields } from '$common';
 
-export function convertInstanceToObject<T>(instance: T) {
+export function removeMethodsFromInstance<T>(instance: T) {
   const object = Object.assign({}, instance);
 
   for (const key in object) {

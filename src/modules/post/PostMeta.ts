@@ -1,5 +1,5 @@
 import { JustFields, Objectable } from '$common';
-import { convertInstanceToObject } from '@utils/convert-js-utils';
+import { removeMethodsFromInstance } from '@utils/convert-js-utils';
 
 export type PostMetaDocument = JustFields<PostMeta>;
 export class PostMeta implements Objectable {
@@ -17,7 +17,7 @@ export class PostMeta implements Objectable {
   }
 
   getObject() {
-    return convertInstanceToObject<PostMeta>(this);
+    return removeMethodsFromInstance<PostMeta>(this);
   }
 
   increaseViewCount(amount?: number) {

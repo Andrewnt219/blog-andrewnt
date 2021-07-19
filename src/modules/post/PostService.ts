@@ -1,9 +1,17 @@
 import adminDb from '@lib/firebase/firestore-admin';
+import fs from 'fs';
+import matter from 'gray-matter';
+import { serialize } from 'next-mdx-remote/serialize';
+import path from 'path';
+import { assertFrontMatter } from './post-utils';
 import { PostMeta, PostMetaDocument } from './PostMeta';
 
 export class PostService {
   static readonly collection = adminDb.collection('post_meta');
+  static readonly ROOT = process.cwd();
+  static readonly BLOG_PATH = path.join(PostService.ROOT, 'blog');
 
+  //#region PostMeta
   static getPostMetaRef(post_id: string) {
     return PostService.collection.doc(post_id);
   }
@@ -27,4 +35,47 @@ export class PostService {
     const postMetaRef = PostService.getPostMetaRef(postMeta.post_id);
     await postMetaRef.update(postMeta.getObject());
   }
+
+  //#endregion
+
+  //#region posts (files)
+
+  static getAllPosts() {
+    return fs.readdirSync(PostService.BLOG_PATH);
+  }
+
+  static async getPostbySlug(postSlug: string) {
+    const pathToPost = PostService.getPostPathBySlug(postSlug);
+    const source = fs.readFileSync(pathToPost, 'utf-8');
+
+    const { content, data } = matter(source);
+    assertFrontMatter(data);
+
+    const mdxSource = await serialize(content, { scope: data });
+
+    return { mdxSource, frontMatter: data };
+  }
+
+  static async getLatestPosts(options: GetFilesOptions) {
+    // Collect all of the MDX files in the pages directory, using fs.readdirSync.
+    // Load the frontmatter (I use an NPM package for this, gray-matter).
+    // Filter out any unpublished posts (ones where isPublished is not set to true).
+    // Sort all of the blog posts by publishedOn, and slice out everything after the specified limit.
+    // Return the data.
+  }
+
+  static async getPopularPosts(options: GetFilesOptions) {
+    // Same concept as `getLatestContent`, but check from the db
+  }
+  //#endregion
+
+  // #region helpers
+  private static getPostPathBySlug(postSlug: string) {
+    return path.join(PostService.BLOG_PATH, `${postSlug}.mdx`);
+  }
+  // #endregion
 }
+
+type GetFilesOptions = {
+  limit: number;
+};
