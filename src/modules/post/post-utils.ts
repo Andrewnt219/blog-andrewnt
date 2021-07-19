@@ -6,7 +6,7 @@ export function initFrontMatter(): FrontMatter {
     description: '',
     thumbnail: '',
     publishedOn: '',
-    isPublished: false,
+    isArchived: false,
     layout: '',
   };
 }
@@ -25,4 +25,8 @@ export function isFrontMatter(data: any): data is FrontMatter {
   }
 
   return true;
+}
+
+export function getLinkToPost(postSlug: string) {
+  return `/post/${postSlug}`;
 }

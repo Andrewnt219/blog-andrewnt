@@ -5,8 +5,8 @@ import {
   createStaticPropsError,
 } from '@modules/api/api-utils';
 import {
-  getAllPostNames,
-  getPostDataBySlug,
+  getAllPostSlugs,
+  getPostData,
   PostData,
 } from '@modules/post/post-data-service';
 import Post from '@modules/post/Post/Post';
@@ -37,14 +37,14 @@ export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
 }) => {
   if (!params) return createStaticPropsError('Invalid params');
 
-  const postData = await getPostDataBySlug(params.post_id);
+  const postData = await getPostData(params.post_id);
 
   return createStaticProps({ ...postData });
 };
 
 /* -------------------------------------------------------------------------- */
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const postNames = getAllPostNames();
+  const postNames = getAllPostSlugs();
   const paths = postNames.map((name) => ({
     params: { post_id: name.replace('.mdx', '') },
   }));

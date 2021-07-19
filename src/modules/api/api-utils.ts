@@ -1,4 +1,5 @@
 import { Result, ResultError, ResultPending, ResultSuccess } from '$common';
+import { createError } from '@utils/create-js-utils';
 import axios, { AxiosError } from 'axios';
 import type {
   GetStaticPropsResult,
@@ -72,7 +73,7 @@ export function createResultError(message: string): ResultError {
   return {
     type: 'error',
     data: null,
-    error: { message },
+    error: createError(message),
     timestamp: new Date().toISOString(),
   };
 }

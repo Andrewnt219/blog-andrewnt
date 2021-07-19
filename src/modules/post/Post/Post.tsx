@@ -5,13 +5,13 @@ import axios from 'axios';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { PostData } from '../PostData';
+import { PostData } from '../post-data-service';
 
 type Props = {
   post: PostData;
 };
 const Post: React.VFC<Props> = ({ post }) => {
-  const { post_id } = post.meta;
+  const { post_id } = post;
 
   useEffect(() => {
     // TODO #2 add error modal and loading state
@@ -25,7 +25,7 @@ const Post: React.VFC<Props> = ({ post }) => {
 
   return (
     <>
-      <header>{post.meta.view_count}</header>
+      <header>{post.view_count}</header>
       <main>
         <MDXRemote {...post.content} components={MdxComponents} />
       </main>
