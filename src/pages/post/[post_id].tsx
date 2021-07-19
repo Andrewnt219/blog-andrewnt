@@ -4,9 +4,12 @@ import {
   createStaticProps,
   createStaticPropsError,
 } from '@modules/api/api-utils';
+import {
+  getAllPostNames,
+  getPostDataBySlug,
+  PostData,
+} from '@modules/post/post-data-service';
 import Post from '@modules/post/Post/Post';
-import { PostData } from '@modules/post/PostData';
-import { PostService } from '@modules/post/PostService';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps> & {
@@ -34,14 +37,14 @@ export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
 }) => {
   if (!params) return createStaticPropsError('Invalid params');
 
-  const postData = await PostService.getPostbySlug(params.post_id);
+  const postData = await getPostDataBySlug(params.post_id);
 
   return createStaticProps({ ...postData });
 };
 
 /* -------------------------------------------------------------------------- */
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const postNames = PostService.getAllPostNames();
+  const postNames = getAllPostNames();
   const paths = postNames.map((name) => ({
     params: { post_id: name.replace('.mdx', '') },
   }));

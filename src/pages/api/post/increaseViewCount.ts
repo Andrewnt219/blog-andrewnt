@@ -4,8 +4,13 @@ import {
   createResultSuccess,
   withHttpMethodHandler,
 } from '@modules/api/api-utils';
-import { PostMeta } from '@modules/post/PostMeta';
-import { PostService } from '@modules/post/PostService';
+import {
+  addPostMeta,
+  getPostMeta,
+  initPostMeta,
+  PostMeta,
+  updatePostMeta,
+} from '@modules/post/post-meta-service';
 import { NextApiHandler } from 'next';
 
 type Data = Pick<PostMeta, 'view_count'>;
@@ -16,19 +21,19 @@ const patch: NextApiHandler<Result<Data>> = async (req, res) => {
   if (!post_id || typeof post_id !== 'string')
     return res.status(422).json(createResultError('Invalid post_id'));
 
-  const postMeta = await PostService.getPostMeta(post_id);
+  const postMeta = await getPostMeta(post_id);
 
   if (!postMeta) {
-    const postMeta = new PostMeta(post_id);
-    await PostService.addPostMeta(postMeta);
+    const postMeta = initPostMeta(post_id);
+    await addPostMeta(postMeta);
 
     return res
       .status(201)
       .json(createResultSuccess({ view_count: postMeta.view_count }));
   }
 
-  postMeta.increaseViewCount();
-  await PostService.updatePostMeta(postMeta);
+  postMeta.view_count++;
+  await updatePostMeta(postMeta);
 
   return res
     .status(200)
