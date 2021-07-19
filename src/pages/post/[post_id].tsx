@@ -4,12 +4,12 @@ import {
   createStaticProps,
   createStaticPropsError,
 } from '@modules/api/api-utils';
+import Post from '@modules/post/components/Post/Post';
 import {
   getAllPostSlugs,
   getPostData,
   PostData,
 } from '@modules/post/post-data-service';
-import Post from '@modules/post/Post/Post';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps> & {

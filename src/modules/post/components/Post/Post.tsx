@@ -1,11 +1,11 @@
 import { getErrorMessage } from '@modules/api/api-utils';
-import MdxComponents from '@modules/mdx/MdxComponents/MdxComponents';
+import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
 import axios from 'axios';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { PostData } from '../post-data-service';
+import { PostData } from '../../post-data-service';
 
 type Props = {
   post: PostData;

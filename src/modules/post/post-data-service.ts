@@ -48,8 +48,9 @@ export async function getPostData(postSlug: string): Promise<PostData> {
 export async function getAllPostMatter(filterFn?: FilterPostFn) {
   const postSlugs = getAllPostSlugs();
   const postMatters = await Promise.all(postSlugs.map(getPostMatter));
+  const publishedPostMatter = postMatters.filter(filterPostNotArchived);
 
-  return filterFn ? postMatters.filter(filterFn) : postMatters;
+  return filterFn ? publishedPostMatter.filter(filterFn) : publishedPostMatter;
 }
 
 export async function getPostMatter(postSlug: string): Promise<PostMatter> {
@@ -112,8 +113,8 @@ function getPostPathsBySlugs(postSlugList: string[]) {
   return postSlugList.map(getPostPathBySlug);
 }
 
-export function filterPostNotArchived(postMatters: PostMatter[]) {
-  return postMatters.filter((post) => !post.isArchived);
+export function filterPostNotArchived(postMatter: PostMatter) {
+  return !postMatter.isArchived;
 }
 
 export function filterPostPublishOn(fromDate: Date, toDate: Date) {
