@@ -14,12 +14,12 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
       {/* w-full so main is left aligned even without content */}
       <main
         className={className}
-        tw="flex-1 w-full mt-2xl mb-4xl max-w-4xl mx-auto px-2xl"
+        tw="flex-1 w-full mt-2xl mb-4xl max-w-5xl mx-auto px-2xl"
       >
         {children}
       </main>
 
-      <Footer tw="all-child:(max-w-4xl px-2xl)" />
+      <Footer tw="all-child:(max-w-5xl px-2xl)" />
     </>
   );
 }

@@ -6,13 +6,12 @@ import {
   createStaticProps,
   handleStaticPropsError,
 } from '@modules/api/api-utils';
+import PostPreviewCard from '@modules/homepage/components/PostPreviewCard/PostPreviewCard';
 import { useQueryAllPostData } from '@modules/post/hooks/useQueryAllPostData';
 import { getAllPostData, PostData } from '@modules/post/post-data-service';
-import { filterPostData, getLinkToPost } from '@modules/post/post-utils';
+import { filterPostData } from '@modules/post/post-utils';
 import { getPaginateResult, PaginateResult } from '@utils/convert-js-utils';
-import dayjs from 'dayjs';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import NextLink from 'next/link';
 import { useState } from 'react';
 
 const queryOptions: QueryPostsIndex_Get = {
@@ -43,17 +42,13 @@ export default function Home({ data: initialData, error: serverError }: Props) {
       {(data) => (
         <>
           <h1 tw="font-black text-hero">Latest</h1>
-          <div tw="divide-y-2">
+          <ul tw="divide-y-2 divide-bordercolor">
             {data.items.map((post) => (
-              <h2 tw="p-md" key={post.title}>
-                <NextLink href={getLinkToPost(post.slug)}>
-                  <a>{post.title}</a>
-                </NextLink>
-                <p>{post.view_count} views</p>
-                <p>{dayjs(post.publishedOn).format('YYYY-MM-DD HH:mm:ss')}</p>
-              </h2>
+              <li key={post.post_id}>
+                <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
+              </li>
             ))}
-          </div>
+          </ul>
           {isFetching && <h1 tw="text-lg">Fetching...</h1>}
 
           <button
