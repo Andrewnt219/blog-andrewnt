@@ -1,3 +1,4 @@
+import { sortByDateString } from '@utils/sort-js-utils';
 import dayjs from 'dayjs';
 import fs from 'fs';
 import matter from 'gray-matter';
@@ -35,6 +36,17 @@ const BLOG_PATH = path.join(ROOT_FOLDER, 'blog');
 
 //#region main
 
+export async function getAllPostData(
+  filterFn?: FilterPostFn
+): Promise<PostData[]> {
+  const postSlugs = getAllPostSlugs();
+  const postDataList = await Promise.all(postSlugs.map(getPostData));
+  const publishedPostDataList = postDataList.filter(filterPostNotArchived);
+
+  return filterFn
+    ? publishedPostDataList.filter(filterFn)
+    : publishedPostDataList;
+}
 export async function getPostData(postSlug: string): Promise<PostData> {
   const postMatter = await getPostMatter(postSlug);
   const meta = await getPostMeta(postSlug);
@@ -122,6 +134,13 @@ export function filterPostPublishOn(fromDate: Date, toDate: Date) {
     const publishDate = dayjs(postMatter.publishedOn);
     return publishDate.isAfter(fromDate) && publishDate.isBefore(toDate);
   };
+}
+
+/**
+ * @description this method MUTATE the array
+ */
+export function sortPostByPublishedOn(posts: PostMatter[]) {
+  return posts.sort((a, b) => sortByDateString(a.publishedOn, b.publishedOn));
 }
 
 //#endregion helpers

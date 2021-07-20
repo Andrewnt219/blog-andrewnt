@@ -1,6 +1,6 @@
 declare module '$common' {
   import { ReactNode } from 'react';
-
+  type Order = 'asc' | 'desc';
   type JustMethodKeys<T> = {
     [P in keyof T]: T[P] extends () => void ? P : never;
   }[keyof T];

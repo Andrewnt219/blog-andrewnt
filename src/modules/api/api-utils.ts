@@ -44,6 +44,8 @@ export const handleApiError = (
 };
 
 export function getErrorMessage(error: unknown): string | null {
+  if (typeof error === 'string') return error;
+
   if (axios.isAxiosError(error)) return getAxiosError(error);
 
   if (error instanceof Error) return error.message;
