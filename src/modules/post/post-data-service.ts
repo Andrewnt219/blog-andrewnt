@@ -28,7 +28,10 @@ export type FilterPostFn = (post: PostMatter) => boolean;
 //#endregion types
 
 //#region constants
-const ROOT_FOLDER = process.cwd();
+const ROOT_FOLDER =
+  process.env.NODE_ENV === 'production'
+    ? path.join(process.cwd(), '.next/server/chunks')
+    : process.cwd();
 const BLOG_PATH = path.join(ROOT_FOLDER, 'blog');
 //#endregion constants
 
