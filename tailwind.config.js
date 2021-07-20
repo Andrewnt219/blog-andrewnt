@@ -34,10 +34,6 @@ module.exports = {
       black: colors.gray[900],
     },
 
-    border: (theme) => ({
-      DEFAULT: theme('colors.bordercolor'),
-    }),
-
     fontSize: {
       hero: 'clamp(2.5rem, 2.1rem + 2vw, 4.5rem)', // 40~72px
       h1: 'clamp(1.75rem, 1.5rem + 1.25vw, 3rem)', // 28~48px
@@ -64,6 +60,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', ...fontFamily.sans],
       },
+
+      borderColor: (theme) => ({
+        DEFAULT: theme('colors.bordercolor'),
+      }),
     },
   },
   variants: {

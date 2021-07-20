@@ -21,7 +21,7 @@ function PostPreviewCard({ className, post }: Props) {
       </div>
 
       <div tw="md:col-span-3">
-        <h2 tw="text-h2 font-bold">{post.title}</h2>
+        <h3 tw="text-h2 font-bold">{post.title}</h3>
         <p tw="text-textmuted mt-lg">{post.description}</p>
 
         <ButtonLink href={getLinkToPost(post.post_id)} tw="inline-block mt-xs">

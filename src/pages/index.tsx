@@ -7,6 +7,7 @@ import {
   handleStaticPropsError,
 } from '@modules/api/api-utils';
 import PostPreviewCard from '@modules/homepage/components/PostPreviewCard/PostPreviewCard';
+import SectionHeader from '@modules/homepage/SectionHeader/SectionHeader';
 import { useQueryAllPostData } from '@modules/post/hooks/useQueryAllPostData';
 import { getAllPostData, PostData } from '@modules/post/post-data-service';
 import { filterPostData } from '@modules/post/post-utils';
@@ -15,7 +16,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useState } from 'react';
 
 const queryOptions: QueryPostsIndex_Get = {
-  mode: 'popular',
+  mode: 'latest',
   order: 'desc',
   page: 1,
   perPage: 10,
@@ -41,30 +42,36 @@ export default function Home({ data: initialData, error: serverError }: Props) {
     <WithDataFetching error={serverError ?? error} data={data}>
       {(data) => (
         <>
-          <h1 tw="font-black text-hero">Latest</h1>
-          <ul tw="divide-y-2 divide-bordercolor">
-            {data.items.map((post) => (
-              <li key={post.post_id}>
-                <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
-              </li>
-            ))}
-          </ul>
-          {isFetching && <h1 tw="text-lg">Fetching...</h1>}
+          <section aria-label="latest articles">
+            <SectionHeader
+              title="Latest"
+              subTitle="All the latest stuffs I have shared"
+            />
 
-          <button
-            tw="disabled:text-textmuted"
-            disabled={data.next_page === null}
-            onClick={() => setPage((prev) => ++prev)}
-          >
-            Next
-          </button>
-          <button
-            tw="ml-md disabled:text-textmuted"
-            disabled={data.prev_page === null}
-            onClick={() => setPage((prev) => --prev)}
-          >
-            Previous
-          </button>
+            <ul tw="divide-y-2 divide-bordercolor">
+              {data.items.map((post) => (
+                <li key={post.post_id}>
+                  <PostPreviewCard tw="py-3xl" post={post} />
+                </li>
+              ))}
+            </ul>
+            {isFetching && <h1 tw="text-lg">Fetching...</h1>}
+
+            <button
+              tw="disabled:text-textmuted"
+              disabled={data.next_page === null}
+              onClick={() => setPage((prev) => ++prev)}
+            >
+              Next
+            </button>
+            <button
+              tw="ml-md disabled:text-textmuted"
+              disabled={data.prev_page === null}
+              onClick={() => setPage((prev) => --prev)}
+            >
+              Previous
+            </button>
+          </section>
         </>
       )}
     </WithDataFetching>
