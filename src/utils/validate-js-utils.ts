@@ -15,3 +15,15 @@ export function isValidDate(date: any): date is Date {
 
   return castedDate instanceof Date && !isNaN(castedDate.getTime());
 }
+
+export function isNumber(num: unknown): num is number | string {
+  if (typeof num === 'string') {
+    return !isNaN(+num);
+  }
+
+  return isNumberStrict(num);
+}
+
+export function isNumberStrict(num: unknown): num is number {
+  return typeof num === 'number' && !isNaN(num) && isFinite(num);
+}

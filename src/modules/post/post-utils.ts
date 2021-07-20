@@ -1,4 +1,7 @@
-import { FrontMatter } from './post-data-service';
+import { Order } from '$common';
+import { sortByDateString } from '@utils/sort-js-utils';
+import dayjs from 'dayjs';
+import { FrontMatter, PostData, PostMatter } from './post-data-service';
 
 export function initFrontMatter(): FrontMatter {
   return {
@@ -29,4 +32,56 @@ export function isFrontMatter(data: any): data is FrontMatter {
 
 export function getLinkToPost(postSlug: string) {
   return `/post/${postSlug}`;
+}
+
+export function filterPostNotArchived(postMatter: PostMatter) {
+  return !postMatter.isArchived;
+}
+
+export function filterPostPublishOn(fromDate: Date, toDate: Date) {
+  return function (postMatter: PostMatter) {
+    const publishDate = dayjs(postMatter.publishedOn);
+    return publishDate.isAfter(fromDate) && publishDate.isBefore(toDate);
+  };
+}
+
+/**
+ * @description this method MUTATE the array
+ */
+export function sortPostByPublishedOn(posts: PostMatter[]) {
+  return posts.sort((a, b) => sortByDateString(a.publishedOn, b.publishedOn));
+}
+
+/**
+ * @description this method MUTATE the array
+ */
+export function sortPostByViewCount(posts: PostData[]) {
+  return posts.sort((a, b) => a.view_count - b.view_count);
+}
+
+/**
+ * @description this method MUTATE the array
+ */
+export function sortPostByLikeCount(posts: PostData[]) {
+  return posts.sort((a, b) => a.like_count - b.like_count);
+}
+
+export type PostFilterOptions = {
+  mode?: 'latest' | 'popular';
+  order?: Order;
+};
+
+/**
+ * @description this method MUTATE the array
+ */
+export function filterPostData(
+  postData: PostData[],
+  options: PostFilterOptions
+) {
+  if (options.mode === 'latest') sortPostByPublishedOn(postData);
+  if (options.mode === 'popular') sortPostByViewCount(postData);
+
+  if (options.order === 'desc') postData.reverse();
+
+  return postData;
 }

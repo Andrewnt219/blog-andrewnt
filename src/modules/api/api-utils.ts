@@ -64,9 +64,9 @@ export function isResultError(error: unknown): error is ResultError {
 }
 
 export function getAxiosError(error: AxiosError<ResultError>): string | null {
-  if (error.request) return 'Network problem';
-
   if (error.response) return error.response.data.error.message;
+
+  if (error.request) return 'Network problem';
 
   return null;
 }

@@ -1,12 +1,10 @@
-import { sortByDateString } from '@utils/sort-js-utils';
-import dayjs from 'dayjs';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
 import { getPostMeta, PostMeta } from './post-meta-service';
-import { assertFrontMatter } from './post-utils';
+import { assertFrontMatter, filterPostNotArchived } from './post-utils';
 
 //#region types
 type GetFilesOptions = {
@@ -123,24 +121,6 @@ function getPostPathBySlug(postSlug: string) {
 
 function getPostPathsBySlugs(postSlugList: string[]) {
   return postSlugList.map(getPostPathBySlug);
-}
-
-export function filterPostNotArchived(postMatter: PostMatter) {
-  return !postMatter.isArchived;
-}
-
-export function filterPostPublishOn(fromDate: Date, toDate: Date) {
-  return function (postMatter: PostMatter) {
-    const publishDate = dayjs(postMatter.publishedOn);
-    return publishDate.isAfter(fromDate) && publishDate.isBefore(toDate);
-  };
-}
-
-/**
- * @description this method MUTATE the array
- */
-export function sortPostByPublishedOn(posts: PostMatter[]) {
-  return posts.sort((a, b) => sortByDateString(a.publishedOn, b.publishedOn));
 }
 
 //#endregion helpers
