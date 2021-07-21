@@ -14,12 +14,9 @@ export const useQueryLatestPosts = (
   page: number,
   placeholderData?: PaginateResult<PostData>
 ) => {
-  return useQuery(
-    ['query-latest-posts', page],
-    () => queryAllPostData(latestPostsQuery),
-    {
-      placeholderData,
-      keepPreviousData: true,
-    }
-  );
+  const query = { ...latestPostsQuery, page };
+  return useQuery(['query-latest-posts', page], () => queryAllPostData(query), {
+    placeholderData,
+    keepPreviousData: true,
+  });
 };
