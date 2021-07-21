@@ -6,7 +6,15 @@ export function serializePost(matter: matter.GrayMatterFile<string>) {
   return serialize(matter.content, {
     scope: matter.data,
     mdxOptions: {
-      remarkPlugins: [require('remark-code-titles')],
+      remarkPlugins: [
+        require('remark-code-titles'),
+        [
+          require('remark-toc'),
+          {
+            ordered: true,
+          },
+        ],
+      ],
       rehypePlugins: [
         require('rehype-slug'),
 
