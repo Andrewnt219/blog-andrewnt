@@ -1,7 +1,8 @@
 import { QueryPostsIndex_Get } from '@api/posts';
-import { useQueryAllPostData } from '@modules/post/hooks/useQueryAllPostData';
 import { PostData } from '@modules/post/post-data-service';
+import { queryAllPostData } from '@modules/post/post-query-client';
 import { PaginateResult } from '@utils/convert-js-utils';
+import { useQuery } from 'react-query';
 
 export const latestPostsQuery: QueryPostsIndex_Get = {
   mode: 'latest',
@@ -13,16 +14,12 @@ export const useQueryLatestPosts = (
   page: number,
   placeholderData?: PaginateResult<PostData>
 ) => {
-  return useQueryAllPostData(
+  return useQuery(
+    ['query-latest-posts', page],
+    () => queryAllPostData(latestPostsQuery),
     {
       placeholderData,
       keepPreviousData: true,
-    },
-    {
-      page,
-      perPage: latestPostsQuery.perPage,
-      mode: latestPostsQuery.mode,
-      order: latestPostsQuery.order,
     }
   );
 };

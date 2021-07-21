@@ -1,7 +1,8 @@
 import { QueryPostsIndex_Get } from '@api/posts';
-import { useQueryAllPostData } from '@modules/post/hooks/useQueryAllPostData';
 import { PostData } from '@modules/post/post-data-service';
+import { queryAllPostData } from '@modules/post/post-query-client';
 import { PaginateResult } from '@utils/convert-js-utils';
+import { useQuery } from 'react-query';
 
 export const popularPostsQuery: QueryPostsIndex_Get = {
   mode: 'popular',
@@ -13,15 +14,11 @@ export const popularPostsQuery: QueryPostsIndex_Get = {
 export const useQueryPopularPosts = (
   placeholderData?: PaginateResult<PostData>
 ) => {
-  return useQueryAllPostData(
+  return useQuery(
+    'query-popular-posts',
+    () => queryAllPostData(popularPostsQuery),
     {
       placeholderData,
-      keepPreviousData: true,
-    },
-    {
-      perPage: popularPostsQuery.perPage,
-      mode: popularPostsQuery.mode,
-      order: popularPostsQuery.order,
     }
   );
 };
