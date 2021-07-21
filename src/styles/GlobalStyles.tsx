@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import tw, { GlobalStyles as BaseStyles, theme } from 'twin.macro';
+import { markdownStyle } from './_markdownStyle';
+import { prismStyle } from './_prismStyle';
 
 const CustomStyles = createGlobalStyle`
   :root {    
@@ -39,6 +41,9 @@ const CustomStyles = createGlobalStyle`
   #__next {
     ${tw`min-h-full flex flex-col antialiased text-textcolor bg-bgcolor`}
   }
+
+  ${prismStyle}
+  ${markdownStyle}
 `;
 
 const GlobalStyles = () => (

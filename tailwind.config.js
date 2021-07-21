@@ -47,6 +47,14 @@ module.exports = {
     },
 
     extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.textcolor'),
+          },
+        },
+      }),
+
       spacing: {
         xs: '0.25rem',
         sm: '0.5rem',

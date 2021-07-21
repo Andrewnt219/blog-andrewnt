@@ -1,7 +1,7 @@
+import { serializePost } from '@modules/mdx/mdx-utils';
 import fs from 'fs';
 import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
 import { getPostMeta, PostMeta } from './post-meta-service';
 import { assertFrontMatter, filterPostNotArchived } from './post-utils';
@@ -77,12 +77,12 @@ export async function getAllPublishedPostMatter() {
 }
 
 export async function getPostMatter(postSlug: string): Promise<PostMatter> {
-  const { content, data } = getRawPostMatter(postSlug);
-  assertFrontMatter(data);
+  const rawMatter = getRawPostMatter(postSlug);
+  assertFrontMatter(rawMatter.data);
 
-  const mdxSource = await serialize(content, { scope: data });
+  const mdxSource = await serializePost(rawMatter);
 
-  return { ...data, content: mdxSource, slug: postSlug };
+  return { ...rawMatter.data, content: mdxSource, slug: postSlug };
 }
 
 //#endregion main
