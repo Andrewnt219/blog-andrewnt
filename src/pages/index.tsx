@@ -1,61 +1,77 @@
 import { Result } from '$common';
-import { QueryPostsIndex_Get } from '@api/posts';
 import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
 import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
   createStaticProps,
+  getFirstErrorMessage,
   handleStaticPropsError,
 } from '@modules/api/api-utils';
 import PostPreviewCard from '@modules/homepage/components/PostPreviewCard/PostPreviewCard';
-import SectionHeader from '@modules/homepage/SectionHeader/SectionHeader';
-import { useQueryAllPostData } from '@modules/post/hooks/useQueryAllPostData';
-import { getAllPostData, PostData } from '@modules/post/post-data-service';
+import {
+  latestPostsQuery,
+  useQueryLatestPosts,
+} from '@modules/homepage/hooks/useQueryLatestPosts';
+import {
+  popularPostsQuery,
+  useQueryPopularPosts,
+} from '@modules/homepage/hooks/useQueryPopularPosts';
+import {
+  getAllPublishedPostData,
+  PostData,
+} from '@modules/post/post-data-service';
 import { filterPostData } from '@modules/post/post-utils';
-import { getPaginateResult, PaginateResult } from '@utils/convert-js-utils';
+import { PaginateResult } from '@utils/convert-js-utils';
+import cloneDeep from 'lodash/cloneDeep';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { useState } from 'react';
 
-const queryOptions: QueryPostsIndex_Get = {
-  mode: 'latest',
-  order: 'desc',
-  page: 1,
-  perPage: 10,
-};
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 export default function Home({ data: initialData, error: serverError }: Props) {
   const [page, setPage] = useState<number>(1);
 
-  const { isFetching, data, error } = useQueryAllPostData(
-    {
-      placeholderData: initialData ?? undefined,
-      keepPreviousData: true,
-    },
-    {
-      page,
-      perPage: queryOptions.perPage,
-      mode: queryOptions.mode,
-      order: queryOptions.order,
-    }
+  const latestPostsQuery = useQueryLatestPosts(
+    page,
+    initialData?.latestPostsResult
+  );
+  const popularPostsQuery = useQueryPopularPosts(
+    initialData?.popularPostsResult
   );
 
   return (
-    <WithDataFetching error={serverError ?? error} data={data}>
-      {(data) => (
-        <>
-          <section aria-label="latest articles">
-            <SectionHeader
-              title="Latest"
-              subTitle="All the latest stuffs I have shared"
-            />
-
+    <>
+      <WithDataFetching
+        error={getFirstErrorMessage([serverError, popularPostsQuery.error])}
+        data={popularPostsQuery.data}
+      >
+        {(data) => (
+          <>
+            <h1 tw="font-black text-hero">Latest</h1>
             <ul tw="divide-y-2 divide-bordercolor">
               {data.items.map((post) => (
                 <li key={post.post_id}>
-                  <PostPreviewCard tw="py-3xl" post={post} />
+                  <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
                 </li>
               ))}
             </ul>
-            {isFetching && <h1 tw="text-lg">Fetching...</h1>}
+          </>
+        )}
+      </WithDataFetching>
+
+      <WithDataFetching
+        error={getFirstErrorMessage([serverError, latestPostsQuery.error])}
+        data={latestPostsQuery.data}
+      >
+        {(data) => (
+          <>
+            <h1 tw="font-black text-hero">Latest</h1>
+            <ul tw="divide-y-2 divide-bordercolor">
+              {data.items.map((post) => (
+                <li key={post.post_id}>
+                  <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
+                </li>
+              ))}
+            </ul>
+            {latestPostsQuery.isFetching && <h1 tw="text-lg">Fetching...</h1>}
 
             <button
               tw="disabled:text-textmuted"
@@ -71,28 +87,35 @@ export default function Home({ data: initialData, error: serverError }: Props) {
             >
               Previous
             </button>
-          </section>
-        </>
-      )}
-    </WithDataFetching>
+          </>
+        )}
+      </WithDataFetching>
+    </>
   );
 }
 
-type StaticProps = Result<PaginateResult<PostData>>;
+type StaticProps = Result<{
+  latestPostsResult: PaginateResult<PostData>;
+  popularPostsResult: PaginateResult<PostData>;
+}>;
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   try {
-    const allPostData = await getAllPostData();
+    const allPostData = await getAllPublishedPostData();
 
-    filterPostData(allPostData, queryOptions);
-
-    const paginateResult = getPaginateResult(
-      allPostData,
-      queryOptions.perPage,
-      queryOptions.page
+    const latestPostsResult = filterPostData(
+      cloneDeep(allPostData),
+      latestPostsQuery
+    );
+    const popularPostsResult = filterPostData(
+      cloneDeep(allPostData),
+      popularPostsQuery
     );
 
-    return createStaticProps(paginateResult);
+    return createStaticProps({
+      latestPostsResult,
+      popularPostsResult,
+    });
   } catch (error) {
     return handleStaticPropsError(error);
   }

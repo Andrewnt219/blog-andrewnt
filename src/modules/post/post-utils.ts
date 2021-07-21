@@ -1,4 +1,5 @@
 import { Order } from '$common';
+import { getPaginationResult } from '@utils/convert-js-utils';
 import { sortByDateString } from '@utils/sort-js-utils';
 import dayjs from 'dayjs';
 import { FrontMatter, PostData, PostMatter } from './post-data-service';
@@ -69,6 +70,8 @@ export function sortPostByLikeCount(posts: PostData[]) {
 export type PostFilterOptions = {
   mode?: 'latest' | 'popular';
   order?: Order;
+  page?: string | number;
+  perPage?: string | number;
 };
 
 /**
@@ -76,12 +79,12 @@ export type PostFilterOptions = {
  */
 export function filterPostData(
   postData: PostData[],
-  options: PostFilterOptions
+  options: PostFilterOptions = {}
 ) {
   if (options.mode === 'latest') sortPostByPublishedOn(postData);
   if (options.mode === 'popular') sortPostByViewCount(postData);
 
   if (options.order === 'desc') postData.reverse();
 
-  return postData;
+  return getPaginationResult(postData, options.perPage, options.page);
 }

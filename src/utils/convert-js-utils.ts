@@ -9,6 +9,7 @@ export function tryParseNumber(num: unknown): number | null {
 
   return null;
 }
+
 /* -------------------------------------------------------------------------- */
 /*                                    MISC                                    */
 /* -------------------------------------------------------------------------- */
@@ -29,6 +30,7 @@ export function slugify(str: string, separator = ' ') {
 /* -------------------------------------------------------------------------- */
 /*                                 PAGINATION                                 */
 /* -------------------------------------------------------------------------- */
+
 export type PaginateResult<T> = {
   items: T[];
   next_page: number | null;
@@ -37,7 +39,7 @@ export type PaginateResult<T> = {
   next_page_total: number;
   current_page: number;
 };
-export function getPaginateResult<T>(
+export function getPaginationResult<T>(
   items: T[],
   _perPage: number | string | undefined,
   _page: number | string | undefined
@@ -67,4 +69,16 @@ export function paginate<T>(items: T[], perPage: number, page: number): T[] {
   const end = start + perPage;
 
   return items.slice(start, end);
+}
+
+export function tryParsePerPage(
+  pageNumber: string | number | undefined | null
+) {
+  return tryParseNumber(pageNumber) ?? Number.MAX_SAFE_INTEGER;
+}
+
+export function tryParsePageNumber(
+  pageNumber: string | number | undefined | null
+) {
+  return tryParseNumber(pageNumber) ?? 1;
 }

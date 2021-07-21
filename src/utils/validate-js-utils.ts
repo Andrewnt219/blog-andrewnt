@@ -27,3 +27,7 @@ export function isNumber(num: unknown): num is number | string {
 export function isNumberStrict(num: unknown): num is number {
   return typeof num === 'number' && !isNaN(num) && isFinite(num);
 }
+
+export function isBrowser() {
+  return isNullOrUndefined(process.env['IS_BROWSER']);
+}

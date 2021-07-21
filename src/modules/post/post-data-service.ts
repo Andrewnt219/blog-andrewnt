@@ -7,9 +7,6 @@ import { getPostMeta, PostMeta } from './post-meta-service';
 import { assertFrontMatter, filterPostNotArchived } from './post-utils';
 
 //#region types
-type GetFilesOptions = {
-  limit: number;
-};
 
 export type PostMatter = FrontMatter & {
   slug: string;
@@ -37,20 +34,22 @@ const BLOG_PATH = path.join(ROOT_FOLDER, 'blog');
 
 //#region main
 
-export async function getAllPostData(
-  filterFn?: FilterPostFn
-): Promise<PostData[]> {
+export async function getAllPublishedPostData(): Promise<PostData[]> {
   const postSlugs = getAllPostSlugs();
-  const postDataList = await Promise.all(postSlugs.map(getPostData));
+  const postDataList = await Promise.all(postSlugs.map(getPostDataFromSlug));
   const publishedPostDataList = postDataList.filter(filterPostNotArchived);
 
-  return filterFn
-    ? publishedPostDataList.filter(filterFn)
-    : publishedPostDataList;
+  return publishedPostDataList;
 }
-export async function getPostData(postSlug: string): Promise<PostData> {
+export async function getPostDataFromSlug(postSlug: string): Promise<PostData> {
   const postMatter = await getPostMatter(postSlug);
-  const meta = await getPostMeta(postSlug);
+  return getPostDataFromMatter(postMatter);
+}
+
+export async function getPostDataFromMatter(
+  postMatter: PostMatter
+): Promise<PostData> {
+  const meta = await getPostMeta(postMatter.slug);
 
   return {
     ...postMatter,
@@ -58,12 +57,23 @@ export async function getPostData(postSlug: string): Promise<PostData> {
   };
 }
 
-export async function getAllPostMatter(filterFn?: FilterPostFn) {
+export async function getPostDataFromMeta(
+  postMeta: PostMeta
+): Promise<PostData> {
+  const postMatter = await getPostMatter(postMeta.post_id);
+
+  return {
+    ...postMatter,
+    ...postMeta,
+  };
+}
+
+export async function getAllPublishedPostMatter() {
   const postSlugs = getAllPostSlugs();
   const postMatters = await Promise.all(postSlugs.map(getPostMatter));
   const publishedPostMatter = postMatters.filter(filterPostNotArchived);
 
-  return filterFn ? publishedPostMatter.filter(filterFn) : publishedPostMatter;
+  return publishedPostMatter;
 }
 
 export async function getPostMatter(postSlug: string): Promise<PostMatter> {
@@ -75,17 +85,6 @@ export async function getPostMatter(postSlug: string): Promise<PostMatter> {
   return { ...data, content: mdxSource, slug: postSlug };
 }
 
-export async function getLatestPostMatter(options: GetFilesOptions) {
-  // Collect all of the MDX files in the pages directory, using fs.readdirSync.
-  // Load the frontmatter (I use an NPM package for this, gray-matter).
-  // Filter out any unpublished posts (ones where isPublished is not set to true).
-  // Sort all of the blog posts by publishedOn, and slice out everything after the specified limit.
-  // Return the data.
-}
-
-export async function getPopularPostMatter(options: GetFilesOptions) {
-  // Same concept as `getLatestContent`, but check from the db
-}
 //#endregion main
 
 //#region helpers

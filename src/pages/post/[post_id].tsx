@@ -7,7 +7,7 @@ import {
 import Post from '@modules/post/components/Post/Post';
 import {
   getAllPostSlugs,
-  getPostData,
+  getPostDataFromSlug,
   PostData,
 } from '@modules/post/post-data-service';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
 }) => {
   if (!params) return createStaticPropsError('Invalid params');
 
-  const postData = await getPostData(params.post_id);
+  const postData = await getPostDataFromSlug(params.post_id);
 
   return createStaticProps({ ...postData });
 };

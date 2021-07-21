@@ -1,5 +1,6 @@
 import { Result, ResultError, ResultPending, ResultSuccess } from '$common';
 import { createError } from '@utils/create-js-utils';
+import { isBrowser, isEmptyString } from '@utils/validate-js-utils';
 import axios, { AxiosError } from 'axios';
 import type {
   GetStaticPropsResult,
@@ -44,15 +45,27 @@ export const handleApiError = (
 };
 
 export function getErrorMessage(error: unknown): string | null {
-  if (typeof error === 'string') return error;
+  if (error === null) return null;
 
-  if (axios.isAxiosError(error)) return getAxiosError(error);
+  if (typeof error === 'string') return error;
 
   if (error instanceof Error) return error.message;
 
   if (isResultError(error)) return error.error.message;
 
+  if (isBrowser() && axios.isAxiosError(error)) return getAxiosError(error);
+
   return null;
+}
+
+export function getErrorMessages(errors: unknown[]): (string | null)[] {
+  return errors.map(getErrorMessage);
+}
+
+export function getFirstErrorMessage(errors: unknown[]): string | null {
+  return (
+    getErrorMessages(errors).find((message) => !isEmptyString(message)) ?? null
+  );
 }
 
 export function isResultError(error: unknown): error is ResultError {
