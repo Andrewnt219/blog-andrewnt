@@ -18,5 +18,6 @@ export const useQueryLatestPosts = (
   return useQuery(['query-latest-posts', page], () => queryAllPostData(query), {
     placeholderData,
     keepPreviousData: true,
+    staleTime: 30 * 1000,
   });
 };

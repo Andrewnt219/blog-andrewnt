@@ -19,6 +19,7 @@ export const useQueryPopularPosts = (
     () => queryAllPostData(popularPostsQuery),
     {
       placeholderData,
+      staleTime: 30 * 1000,
     }
   );
 };
