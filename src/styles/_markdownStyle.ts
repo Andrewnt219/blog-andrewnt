@@ -2,11 +2,11 @@ import tw, { css } from 'twin.macro';
 
 export const markdownStyle = css`
   .heading-anchor {
-    ${tw`inline-flex`}
+    ${tw``}
 
     &::after {
       content: '#';
-      ${tw`invisible block ml-sm text-textmuted`}
+      ${tw`invisible ml-sm text-textmuted`}
     }
 
     &:hover ::after {
