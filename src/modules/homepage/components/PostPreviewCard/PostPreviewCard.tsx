@@ -2,6 +2,7 @@ import { PostData } from '@modules/post/post-data-service';
 import { getLinkToPost } from '@modules/post/post-utils';
 import { ButtonLink } from '@ui/Button/Button';
 import dayjs from 'dayjs';
+import NextLink from 'next/link';
 type Props = {
   className?: string;
   post: PostData;
@@ -24,9 +25,9 @@ function PostPreviewCard({ className, post }: Props) {
         <h3 tw="text-h2 font-bold">{post.title}</h3>
         <p tw="text-textmuted mt-lg">{post.description}</p>
 
-        <ButtonLink href={getLinkToPost(post.post_id)} tw="inline-block mt-xs">
-          Read more
-        </ButtonLink>
+        <NextLink href={getLinkToPost(post.post_id)} passHref>
+          <ButtonLink tw="inline-block mt-xs">Read more</ButtonLink>
+        </NextLink>
       </div>
     </article>
   );
