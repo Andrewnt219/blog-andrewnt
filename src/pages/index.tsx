@@ -22,6 +22,7 @@ import {
 } from '@modules/post/post-data-service';
 import { filterPostData } from '@modules/post/post-utils';
 import generateRss from '@modules/rss/generate-rss';
+import LoadingIndicator from '@ui/LoadingIndicator/LoadingIndicator';
 import { PaginateResult } from '@utils/convert-js-utils';
 import cloneDeep from 'lodash/cloneDeep';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -67,10 +68,11 @@ export default function Home({ data: initialData, error: serverError }: Props) {
 
             <PostPreviewCardList posts={data.items} />
 
-            {latestPostsQuery.isFetching && <h1 tw="text-lg">Fetching...</h1>}
+            <LoadingIndicator isLoading={latestPostsQuery.isFetching} />
+            {/* <LoadingIndicator /> */}
 
             <button
-              tw="disabled:text-textmuted"
+              tw="disabled:text-textmuted mt-md"
               disabled={data.next_page === null}
               onClick={() => setPage((prev) => ++prev)}
             >
