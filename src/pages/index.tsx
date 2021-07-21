@@ -21,6 +21,7 @@ import {
   PostData,
 } from '@modules/post/post-data-service';
 import { filterPostData } from '@modules/post/post-utils';
+import generateRss from '@modules/rss/generate-rss';
 import { PaginateResult } from '@utils/convert-js-utils';
 import cloneDeep from 'lodash/cloneDeep';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -113,6 +114,8 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
     });
   } catch (error) {
     return handleStaticPropsError(error);
+  } finally {
+    process.env.NODE_ENV === 'production' && generateRss();
   }
 };
 

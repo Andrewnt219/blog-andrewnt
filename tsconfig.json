@@ -34,6 +34,12 @@
       "@root/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "twin.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "twin.d.ts",
+    "build-helpers/generate-rss.js"
+  ],
   "exclude": ["node_modules"]
 }
