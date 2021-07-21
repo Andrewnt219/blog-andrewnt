@@ -6,7 +6,8 @@ import {
   getFirstErrorMessage,
   handleStaticPropsError,
 } from '@modules/api/api-utils';
-import PostPreviewCard from '@modules/homepage/components/PostPreviewCard/PostPreviewCard';
+import PostPreviewCardList from '@modules/homepage/components/PostPreviewCardList/PostPreviewCardList';
+import SectionHeader from '@modules/homepage/components/SectionHeader/SectionHeader';
 import {
   latestPostsQuery,
   useQueryLatestPosts,
@@ -44,16 +45,11 @@ export default function Home({ data: initialData, error: serverError }: Props) {
         data={popularPostsQuery.data}
       >
         {(data) => (
-          <>
-            <h1 tw="font-black text-hero">Latest</h1>
-            <ul tw="divide-y-2 divide-bordercolor">
-              {data.items.map((post) => (
-                <li key={post.post_id}>
-                  <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
-                </li>
-              ))}
-            </ul>
-          </>
+          <section aria-label="Popular posts">
+            <SectionHeader title="Popular" subTitle="Trending articles" />
+
+            <PostPreviewCardList posts={data.items} />
+          </section>
         )}
       </WithDataFetching>
 
@@ -62,15 +58,14 @@ export default function Home({ data: initialData, error: serverError }: Props) {
         data={latestPostsQuery.data}
       >
         {(data) => (
-          <>
-            <h1 tw="font-black text-hero">Latest</h1>
-            <ul tw="divide-y-2 divide-bordercolor">
-              {data.items.map((post) => (
-                <li key={post.post_id}>
-                  <PostPreviewCard tw="py-xl md:py-3xl" post={post} />
-                </li>
-              ))}
-            </ul>
+          <section aria-label="latest posts">
+            <SectionHeader
+              title="Latest"
+              subTitle="All the web articles I have written"
+            />
+
+            <PostPreviewCardList posts={data.items} />
+
             {latestPostsQuery.isFetching && <h1 tw="text-lg">Fetching...</h1>}
 
             <button
@@ -87,7 +82,7 @@ export default function Home({ data: initialData, error: serverError }: Props) {
             >
               Previous
             </button>
-          </>
+          </section>
         )}
       </WithDataFetching>
     </>
