@@ -7,10 +7,10 @@ export const markdownStyle = css`
     &::after {
       content: '#';
       ${tw`invisible ml-sm text-textmuted`}
-    }
 
-    &:hover ::after {
-      ${tw`visible`}
+      *:hover > & {
+        ${tw`visible`}
+      }
     }
   }
 `;

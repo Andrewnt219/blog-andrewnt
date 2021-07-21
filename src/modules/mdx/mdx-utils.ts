@@ -21,7 +21,7 @@ export function serializePost(matter: matter.GrayMatterFile<string>) {
         [
           require('rehype-autolink-headings'),
           {
-            behavior: 'wrap',
+            behavior: 'append',
             properties: {
               className: 'heading-anchor',
             },

@@ -1,3 +1,4 @@
+import { ButtonLink } from '@ui/Button/Button';
 import dynamic from 'next/dynamic';
 import { MdxTypography } from '../MdxTypography/MdxTypography';
 const Example = dynamic(() => import('../Example/Example'));
@@ -12,6 +13,7 @@ const MdxComponents = {
   h6: (props: any) => <MdxTypography {...props} variant="h6" />,
   pre: (props: any) => <MdxTypography {...props} variant="pre" />,
   p: (props: any) => <MdxTypography {...props} />,
+  a: (props: any) => <ButtonLink {...props} />,
 };
 
 export default MdxComponents;
