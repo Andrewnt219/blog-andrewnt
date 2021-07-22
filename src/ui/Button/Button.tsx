@@ -58,3 +58,12 @@ export const ButtonLink = styled.a<ButtonLinkProps>`
   ${variantsStyle('text')}
   ${(p) => sizeStyle(p.size)}
 `;
+
+type ButtonPrimaryProps = {
+  size?: Size;
+};
+export const ButtonPrimary = styled.button<ButtonPrimaryProps>`
+  ${commonStyle}
+  ${(p) => sizeStyle(p.size)}
+  ${tw`bg-primary text-bgcolor hover:bg-primarymuted`}
+`;
