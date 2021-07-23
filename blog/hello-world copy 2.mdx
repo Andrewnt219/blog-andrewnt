@@ -1,21 +1,16 @@
 ---
-title: hello-world copy 2
+title: How Stripe design beautiful website
 description: An in-depth look at the technical structure for my blog.
-thumbnail: /static/thumbnail
+thumbnail:
+  width: 1080
+  height: 810
+  url: /images/hello-world/hero.png
 isArchived: false
 publishedOn: 2021-04-02T09:15:00-0400
 layout: Article
 ---
 
 ## Table of Contents
-
-<Image
-  alt={`Stripe Logo`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/banner.png`}
-  width={1024}
-  height={512}
-  priority
-/>
 
 Have you ever visited a website and been completely in awe of the elegance and simplicity of its design? For me, that website is [Stripe](https://stripe.com/). Stripe is a company that allows people and businesses to accept payments online and in mobile apps. That doesn't sound like a company that would have an exquisite website design, but look at how Stripe describes themselves on their about page.
 
@@ -26,10 +21,10 @@ Rather than making design an afterthought, it's treated as a first-class citizen
 ## The Design
 
 <Image
-  alt={`Stripe Website`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/website.png`}
-  width={2248}
-  height={1590}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 Pictured above is the design for Stripe's main landing page. At first glance, here's what really sticks out to me:
@@ -46,10 +41,10 @@ Let's start with the first observation: the font.
 Stripe uses a font called [Camphor](https://www.fontshop.com/families/camphor). It's a modern, uncluttered, sans serif font designed by Nick Job in 2010. It _really_ shines here and looks great in a variety of weights.
 
 <Image
-  alt={`Camphor Font`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/camphor.png`}
-  width={1000}
-  height={1114}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 Typography is arguably the most important part of your design since it's the medium for your content. Stripe does an excellent job of using different weights and colors to provide adequate contrast. This draws your attention to the things that matter most.
@@ -57,10 +52,10 @@ Typography is arguably the most important part of your design since it's the med
 ### Heading 3
 
 <Image
-  alt={`Typography Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/typography.png`}
-  width={1162}
-  height={944}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 Let's see how we can make our font as crisp and clear as possible. First, we'll define our font family to be Camphor along with some fallback fonts. **Note:** Camphor is not free and should be purchased if you're planning to use it in production. However, I did find a [gist containing the font](https://gist.github.com/bdno86/d1f49b6f533df3f832b39d6cc3194303) which you can mess around with.
@@ -81,10 +76,10 @@ body {
 In this example, I apply `-webkit-font-smoothing` followed by `text-rendering`.
 
 <Image
-  alt={`CSS Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/css-example.gif`}
-  width={1136}
-  height={898}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 Okay, so we have a solid font. Let's use it on some buttons!
@@ -94,10 +89,10 @@ Okay, so we have a solid font. Let's use it on some buttons!
 Indicating a visual response when hovering over items like buttons and links provides a great user experience. In the example below, you'll notice the buttons shift _slightly_ up when hovered and change colors to a lighter shade of purple. The box-shadow also becomes a bit more intense.
 
 <Image
-  alt={`Buttons Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/buttons.gif`}
-  width={980}
-  height={288}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 ```css
@@ -115,10 +110,10 @@ This really makes it feel like the button is meant to be clicked. It's a wonderf
 I personally love the color palette of Stripe's website. It's bright and grabs your attention with some nice accent colors.
 
 <Image
-  alt={`Color Palette`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/color-palette.png`}
-  width={1110}
-  height={275}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 ## Utilizing SVGs
@@ -132,10 +127,10 @@ Something else that really stuck out to me was how high quality their images loo
 That tablet displayed on the home screen? Yeah, that's a `.svg` that's been scaled and rotated. Here's the `.svg` file from Stripe's website. Notice how when you zoom in the quality remains clear.
 
 <Image
-  alt={`SVG Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/salesforce.svg`}
-  width={420 * 2}
-  height={338 * 2}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 ## Animations
@@ -143,19 +138,19 @@ That tablet displayed on the home screen? Yeah, that's a `.svg` that's been scal
 Animations are the extra polish on top of an already beautiful design. Throughout all of Stripe's pages, you'll find a variety of animations like the ones shown below. Some are more subtle than others, but each serves a purpose.
 
 <Image
-  alt={`Animation Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/spinning-animation.gif`}
-  width={1170}
-  height={418}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 Here's another example that I really like.
 
 <Image
-  alt={`Another Animation Example`}
-  src={`/static/images/how-stripe-designs-beautiful-websites/animation-example.gif`}
-  width={2198}
-  height={358}
+  alt={`Stripe Logo`}
+  src={thumbnail.url}
+  width={thumbnail.width}
+  height={thumbnail.height}
 />
 
 If you've never worked with CSS animations, I wrote a quick article showing how to [learn them by example](/blog/learning-css-animations-by-example).
