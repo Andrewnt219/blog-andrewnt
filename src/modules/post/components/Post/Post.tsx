@@ -2,8 +2,10 @@ import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
 import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
+import { Button, ButtonPrimary } from '@ui/Button/Button';
 import Logo from '@ui/Logo/Logo';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -47,11 +49,50 @@ const Post: React.VFC<Props> = ({ post }) => {
           />
         </div>
       </header>
-
       {/* TODO (or not) width: min(350px, 100%), max-width page 70rem */}
       <StyledWrapper>
         <MDXRemote {...post.content} components={MdxComponents} />
       </StyledWrapper>
+      <footer tw="">
+        <header>
+          <h3 tw="font-bold">Published on</h3>
+          <time tw="text-textmuted" dateTime={post.publishedOn}>
+            {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
+          </time>
+        </header>
+
+        <div>
+          <h3 tw="font-bold">Tags</h3>
+          <ul tw="text-textmuted flex gap-sm flex-wrap">
+            <li>#react-js</li>
+            <li>#next-js</li>
+            <li>#javascript</li>
+          </ul>
+        </div>
+
+        <div tw="flex gap-sm">
+          <Button variant="contained" size="sm">
+            Share on Facebook
+          </Button>
+          <Button variant="contained" size="sm">
+            Share on Twitter
+          </Button>
+          <Button variant="contained" size="sm">
+            Share on LinkedIn
+          </Button>
+
+          <ButtonPrimary
+            tw="text-center"
+            as="a"
+            href="https://www.buymeacoffee.com/andrewnt219"
+            target="_blank"
+            rel="noopener"
+            size="md"
+          >
+            Buy me a coffee
+          </ButtonPrimary>
+        </div>
+      </footer>
     </section>
   );
 };
@@ -66,50 +107,5 @@ const StyledWrapper = styled.div`
 {
   /* <div tw="mt-2xl flex gap-3xl flex-row-reverse items-start"></div> */
 }
-//  <aside tw="sticky mt-4xl top-[10rem] space-y-2xl border shadow-sm p-xl pb-2xl">
-//    <header>
-//      <h3 tw="font-bold">Published on</h3>
-//      <time tw="text-textmuted" dateTime={post.publishedOn}>
-//        {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
-//      </time>
-//    </header>
-
-//    <div>
-//      <h3 tw="font-bold">Reading time</h3>
-//      <p tw="text-textmuted">3 minutes</p>
-//    </div>
-
-//    <div>
-//      <h3 tw="font-bold">Tags</h3>
-//      <ul tw="text-textmuted flex gap-sm flex-wrap">
-//        <li>#react-js</li>
-//        <li>#next-js</li>
-//        <li>#javascript</li>
-//      </ul>
-//    </div>
-
-//    <div tw="flex flex-col gap-sm">
-//      <Button variant="contained" size="md">
-//        Share on Facebook
-//      </Button>
-//      <Button variant="contained" size="md">
-//        Share on Twitter
-//      </Button>
-//      <Button variant="contained" size="md">
-//        Share on LinkedIn
-//      </Button>
-
-//      <ButtonPrimary
-//        tw="text-center"
-//        as="a"
-//        href="https://www.buymeacoffee.com/andrewnt219"
-//        target="_blank"
-//        rel="noopener"
-//        size="md"
-//      >
-//        Buy me a coffee
-//      </ButtonPrimary>
-//    </div>
-//  </aside>;
 
 export default Post;

@@ -6,7 +6,7 @@ type Props = {
 function Footer({ className }: Props) {
   return (
     <footer className={className} tw="mb-3xl px-sm md:px-md">
-      <div tw="border-t border-bgmuted mx-auto pt-2xl pb-3xl">
+      <div tw="border-t mx-auto pt-2xl pb-3xl">
         <nav aria-label="Links to my other social media">
           <ul tw="grid grid-cols-2 md:grid-cols-3">
             {mediaLinks.map((link) => (

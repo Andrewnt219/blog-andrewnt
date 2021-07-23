@@ -25,6 +25,8 @@ module.exports = {
 
       bgcolor: getColorFromCssVariable('bg-color'),
       bgmuted: getColorFromCssVariable('bg-muted'),
+      bglight: getColorFromCssVariable('bg-light'),
+      bggray: getColorFromCssVariable('bg-gray'),
 
       bordercolor: getColorFromCssVariable('border-color'),
 

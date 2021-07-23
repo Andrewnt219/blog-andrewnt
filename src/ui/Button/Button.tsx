@@ -1,6 +1,6 @@
 import tw, { styled } from 'twin.macro';
 
-const commonStyle = tw`border border-transparent font-medium rounded outline-none! focus-visible:(ring-2 ring-textcolor) active:(ring-2 ring-textcolor)`;
+const commonStyle = tw`font-medium rounded outline-none! focus-visible:(ring-2 ring-textcolor) active:(ring-2 ring-textcolor)`;
 
 type Size = 'sm' | 'md' | 'lg' | 'even';
 const sizeStyle = (size: Size | undefined) => {
@@ -23,7 +23,7 @@ type Variant = 'contained' | 'outline' | 'text';
 const variantsStyle = (variant: Variant | undefined) => {
   switch (variant) {
     case 'contained':
-      return tw`bg-bgmuted text-textcolor border-transparent transition-colors hover:bg-opacity-70 `;
+      return tw`shadow-sm bg-bggray border text-textcolor  transition-colors hover:bg-bglight `;
 
     case 'outline':
       return tw`bg-transparent border-bordercolor`;

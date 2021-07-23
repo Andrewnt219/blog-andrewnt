@@ -12,7 +12,9 @@ const CustomStyles = createGlobalStyle`
     --text-muted: 214, 6%, 47%;
     
     --bg-color: 0, 0%, 100%;
-    --bg-muted: 220, 13%, 91%;    
+    --bg-muted: 220, 13%, 91%;
+    --bg-gray: 223, 30%, 95%;
+    --bg-light: 213, 23%, 91%;
 
     --border-color: 220, 13%, 91%;
   } 
@@ -33,6 +35,9 @@ const CustomStyles = createGlobalStyle`
       
       --bg-color: 221, 39%, 11%;
       --bg-muted: 215, 14%, 34%;
+      --bg-gray: 217, 47%, 14%;    
+      --bg-light: 217, 33%, 20%;
+
 
       --border-color: 217, 19%, 27%;
 
