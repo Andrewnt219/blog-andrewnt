@@ -22,7 +22,7 @@ function PostPreviewCard({ className, post }: Props) {
       </div>
 
       <div tw="md:col-span-3">
-        <h3 tw="text-h2 font-bold">{post.title}</h3>
+        <h3 tw="text-h3 font-bold">{post.title}</h3>
         <p tw="text-textmuted mt-lg">{post.description}</p>
 
         <NextLink href={getLinkToPost(post.post_id)} passHref>
