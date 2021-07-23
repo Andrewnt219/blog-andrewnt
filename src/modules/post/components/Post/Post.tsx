@@ -2,6 +2,7 @@ import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
 import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
+import Logo from '@ui/Logo/Logo';
 import axios from 'axios';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
@@ -27,9 +28,15 @@ const Post: React.VFC<Props> = ({ post }) => {
 
   return (
     <section tw="">
-      <header>
-        <h1 tw="text-h1 text-center font-bold">{post.title}</h1>
-        <div tw="w-full mt-xl">
+      <header tw="text-center">
+        <h1 tw="text-h1 font-bold">{post.title}</h1>
+        <p tw="text-textmuted">by Andrew N.T.</p>
+
+        <div aria-hidden tw="mt-sm md:mt-2xl pointer-events-none">
+          <Logo tw="w-8  animate-pulse md:w-10" />
+        </div>
+
+        <div tw="w-full mt-xl md:mt-3xl">
           <MdxImage
             src={post.thumbnail.url}
             alt="lorem ipsum demat"

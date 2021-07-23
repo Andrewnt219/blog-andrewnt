@@ -24,7 +24,7 @@ const StyledWrapper = styled.div<StyledWraperProps>`
   ${tw`mt-md md:mt-xl w-full`}
 
   & img {
-    ${tw`(border border-solid border-bordercolor)! `}
+    ${tw`rounded (border border-solid border-bordercolor)! `}
   }
 
   ${(p) => !p.isRestrained && tw`col-span-full!`}
