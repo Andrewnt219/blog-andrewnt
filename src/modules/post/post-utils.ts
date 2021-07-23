@@ -8,7 +8,11 @@ export function initFrontMatter(): FrontMatter {
   return {
     title: '',
     description: '',
-    thumbnail: '',
+    thumbnail: {
+      height: -1,
+      width: -1,
+      url: '',
+    },
     publishedOn: '',
     isArchived: false,
     layout: '',

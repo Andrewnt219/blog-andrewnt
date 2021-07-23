@@ -1,16 +1,33 @@
 import Image, { ImageProps } from 'next/image';
+import tw, { styled } from 'twin.macro';
 
-type Props = ImageProps & {
-  className?: string;
-  alt: string;
-};
-function MdxImage({ className, ...props }: Props) {
+type Props = ImageProps &
+  Pick<StyledWraperProps, 'isRestrained'> & {
+    className?: string;
+    alt: string;
+  };
+function MdxImage({ className, isRestrained, ...props }: Props) {
   const { alt } = props;
+
   return (
-    <div className={className} tw="mt-md md:mt-lg">
+    <StyledWrapper isRestrained={isRestrained} className={className}>
       <Image {...props} alt={alt} />
-    </div>
+    </StyledWrapper>
   );
 }
+
+type StyledWraperProps = {
+  isRestrained?: boolean;
+};
+
+const StyledWrapper = styled.div<StyledWraperProps>`
+  ${tw`mt-md md:mt-xl w-full`}
+
+  & img {
+    ${tw`(border border-solid border-bordercolor)! `}
+  }
+
+  ${(p) => !p.isRestrained && tw`col-span-full!`}
+`;
 
 export default MdxImage;

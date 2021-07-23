@@ -9,7 +9,7 @@ type Props = {
 function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
   return (
     <>
-      <Navbar tw="px-2xl" />
+      <Navbar tw="px-2xl z-10" />
 
       {/* w-full so main is left aligned even without content */}
       <main

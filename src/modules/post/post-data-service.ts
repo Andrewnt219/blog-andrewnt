@@ -15,7 +15,11 @@ export type PostMatter = FrontMatter & {
 export type FrontMatter = {
   title: string;
   description: string;
-  thumbnail: string;
+  thumbnail: {
+    width: number;
+    height: number;
+    url: string;
+  };
   publishedOn: string;
   isArchived: boolean;
   layout: string;

@@ -18,7 +18,7 @@ const CustomStyles = createGlobalStyle`
   } 
 
   html, body{
-    ${tw`h-full`}
+    ${tw`h-full text-body`}
   }
 
   body {
@@ -35,12 +35,18 @@ const CustomStyles = createGlobalStyle`
       --bg-muted: 215, 14%, 34%;
 
       --border-color: 217, 19%, 27%;
+
+      & img {
+        ${tw`filter brightness-95`}
+      }
     }
   }
+
 
   #__next {
     ${tw`min-h-full flex flex-col antialiased text-textcolor bg-bgcolor`}
   }
+
 
   ${prismStyle}
   ${markdownStyle}
