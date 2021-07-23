@@ -12,6 +12,7 @@ export type PostMatter = FrontMatter & {
   slug: string;
   content: MDXRemoteSerializeResult;
 };
+
 export type FrontMatter = {
   title: string;
   description: string;
@@ -22,7 +23,6 @@ export type FrontMatter = {
   };
   publishedOn: string;
   isArchived: boolean;
-  layout: string;
 };
 export type PostData = PostMatter & PostMeta;
 export type FilterPostFn = (post: PostMatter) => boolean;

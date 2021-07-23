@@ -2,13 +2,14 @@ import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
 import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
-import { Button, ButtonPrimary } from '@ui/Button/Button';
+import { Button, ButtonLink } from '@ui/Button/Button';
 import Logo from '@ui/Logo/Logo';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
+import { FaHeart } from 'react-icons/fa';
 import tw, { styled } from 'twin.macro';
 import { PostData } from '../../post-data-service';
 
@@ -49,50 +50,44 @@ const Post: React.VFC<Props> = ({ post }) => {
           />
         </div>
       </header>
-      {/* TODO (or not) width: min(350px, 100%), max-width page 70rem */}
+
       <StyledWrapper>
         <MDXRemote {...post.content} components={MdxComponents} />
+
+        <footer tw="mt-3xl space-y-xl">
+          <div tw="">
+            <h3 tw="font-bold">Was this article helpful?</h3>
+
+            <ButtonLink as="button" tw="inline-flex gap-sm items-center">
+              <FaHeart /> {post.like_count}
+            </ButtonLink>
+          </div>
+
+          <div>
+            <h3 tw="font-bold">Last updated</h3>
+
+            <time tw="text-textmuted" dateTime={post.publishedOn}>
+              {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
+            </time>
+          </div>
+
+          <div>
+            <h3 tw="font-bold">Share this article</h3>
+
+            <div tw="mt-sm flex flex-col gap-sm md:flex-row">
+              <Button variant="contained" size="sm">
+                Facebook
+              </Button>
+              <Button variant="contained" size="sm">
+                Twitter
+              </Button>
+              <Button variant="contained" size="sm">
+                LinkedIn
+              </Button>
+            </div>
+          </div>
+        </footer>
       </StyledWrapper>
-      <footer tw="">
-        <header>
-          <h3 tw="font-bold">Published on</h3>
-          <time tw="text-textmuted" dateTime={post.publishedOn}>
-            {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
-          </time>
-        </header>
-
-        <div>
-          <h3 tw="font-bold">Tags</h3>
-          <ul tw="text-textmuted flex gap-sm flex-wrap">
-            <li>#react-js</li>
-            <li>#next-js</li>
-            <li>#javascript</li>
-          </ul>
-        </div>
-
-        <div tw="flex gap-sm">
-          <Button variant="contained" size="sm">
-            Share on Facebook
-          </Button>
-          <Button variant="contained" size="sm">
-            Share on Twitter
-          </Button>
-          <Button variant="contained" size="sm">
-            Share on LinkedIn
-          </Button>
-
-          <ButtonPrimary
-            tw="text-center"
-            as="a"
-            href="https://www.buymeacoffee.com/andrewnt219"
-            target="_blank"
-            rel="noopener"
-            size="md"
-          >
-            Buy me a coffee
-          </ButtonPrimary>
-        </div>
-      </footer>
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import { ButtonLink } from '@ui/Button/Button';
+import { ButtonLink, ButtonPrimary } from '@ui/Button/Button';
 
 type Props = {
   className?: string;
@@ -18,6 +18,16 @@ function Footer({ className }: Props) {
             ))}
           </ul>
         </nav>
+        <ButtonPrimary
+          tw="text-center"
+          as="a"
+          href="https://www.buymeacoffee.com/andrewnt219"
+          target="_blank"
+          rel="noopener"
+          size="sm"
+        >
+          Buy me a coffee
+        </ButtonPrimary>
       </div>
     </footer>
   );
