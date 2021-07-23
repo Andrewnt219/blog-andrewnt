@@ -2,7 +2,7 @@ import tw, { css } from 'twin.macro';
 
 export const prismStyle = css`
   .remark-code-title {
-    ${tw`px-5 py-3 font-mono text-sm font-bold text-textcolor bg-bgmuted border border-b-0 rounded-t`}
+    ${tw`px-5 py-3 font-mono text-sm font-bold text-textcolor bg-bgmuted border border-b-0 rounded-t mt-md md:mt-xl`}
 
     & + pre {
       ${tw`mt-0! rounded-t-none! border`}

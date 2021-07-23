@@ -60,7 +60,7 @@ export default function Home({ data: initialData, error: serverError }: Props) {
         data={latestPostsQuery.data}
       >
         {(data) => (
-          <section aria-label="latest posts">
+          <section aria-label="latest posts" tw="mt-2xl">
             <SectionHeader
               title="Latest"
               subTitle="All the web articles I have written"

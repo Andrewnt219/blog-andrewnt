@@ -13,7 +13,7 @@ function PostPreviewCard({ className, post }: Props) {
       className={className}
       tw="grid gap-sm items-baseline md:grid-cols-4 "
     >
-      <div tw="flex gap-sm md:(flex-col col-span-1)">
+      <div tw="justify-between flex gap-sm md:(flex-col col-span-1)">
         <time dateTime={dayjs(post.publishedOn).toISOString()}>
           {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
         </time>
