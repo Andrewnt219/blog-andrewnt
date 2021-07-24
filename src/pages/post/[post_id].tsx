@@ -1,5 +1,6 @@
 import { Result } from '$common';
 import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
+import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
   createStaticProps,
   createStaticPropsError,
@@ -10,19 +11,21 @@ import {
   getPostDataFromSlug,
   PostData,
 } from '@modules/post/post-data-service';
+import { usePost } from '@modules/postIdPage/hooks/usePost';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 
-type Props = InferGetStaticPropsType<typeof getStaticProps> & {
-  className?: string;
-};
-export default function PostIdPage({ className, data, error }: Props) {
-  if (error) return <h1>Fail to load post</h1>;
-  if (!data) return <h1>Loading</h1>;
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
+export default function PostIdPage({
+  data: placeholderData,
+  error: serverError,
+}: Props) {
+  const { data, error } = usePost(placeholderData);
 
   return (
-    <div className={className} tw="">
-      <Post post={data} />
-    </div>
+    <WithDataFetching error={serverError ?? error} data={data}>
+      {(data) => <Post post={data} />}
+    </WithDataFetching>
   );
 }
 /* -------------------------------------------------------------------------- */

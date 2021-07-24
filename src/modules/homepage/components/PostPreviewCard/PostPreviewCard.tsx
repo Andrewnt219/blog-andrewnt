@@ -18,7 +18,9 @@ function PostPreviewCard({ className, post }: Props) {
           {dayjs(post.publishedOn).format('MMMM DD, YYYY')}
         </time>
 
-        <span tw="text-textmuted">{post.view_count} views</span>
+        <span tw="text-textmuted">
+          {post.view_count.toLocaleString()} views
+        </span>
       </div>
 
       <div tw="md:col-span-3">

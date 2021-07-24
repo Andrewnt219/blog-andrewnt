@@ -18,7 +18,6 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import tw, { styled } from 'twin.macro';
 import { PostData } from '../../post-data-service';
-
 type Props = {
   post: PostData;
 };
@@ -114,6 +113,8 @@ const Post: React.VFC<Props> = ({ post }) => {
               </Button>
             </div>
           </div>
+
+          <p tw="text-textmuted">{post.view_count.toLocaleString()} views</p>
         </footer>
       </StyledWrapper>
     </section>
