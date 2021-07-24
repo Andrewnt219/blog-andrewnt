@@ -6,7 +6,7 @@ import {
   createStaticPropsError,
 } from '@modules/api/api-utils';
 import {
-  getAllPostSlugs,
+  getAllPublishedPostMatter,
   getPostDataFromSlug,
   PostData,
 } from '@modules/post/post-data-service';
@@ -48,9 +48,9 @@ export const getStaticProps: GetStaticProps<StaticProps, Params> = async ({
 
 /* -------------------------------------------------------------------------- */
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const postNames = getAllPostSlugs();
-  const paths = postNames.map((name) => ({
-    params: { post_id: name.replace('.mdx', '') },
+  const postMatters = await getAllPublishedPostMatter();
+  const paths = postMatters.map((matter) => ({
+    params: { post_id: matter.slug },
   }));
   return {
     paths,
