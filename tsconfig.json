@@ -25,6 +25,7 @@
       "@api/*": ["src/pages/api/*"],
       "@pages/*": ["src/pages/*"],
       "@lib/*": ["src/lib/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
       "@modules/*": ["src/modules/*"],
       "@ui/*": ["src/ui/*"],

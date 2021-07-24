@@ -24,14 +24,17 @@ import {
 import { filterPostData } from '@modules/post/post-utils';
 import generateRss from '@modules/rss/generate-rss';
 import LoadingIndicator from '@ui/LoadingIndicator/LoadingIndicator';
+import Pagination from '@ui/Pagination/Pagination';
 import { PaginateResult } from '@utils/convert-js-utils';
 import cloneDeep from 'lodash/cloneDeep';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { useRouter } from 'next/dist/client/router';
 import { ReactNode, useState } from 'react';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 export default function Home({ data: initialData, error: serverError }: Props) {
   const [page, setPage] = useState<number>(1);
+  const router = useRouter();
 
   const latestPostsQuery = useQueryLatestPosts(
     page,
@@ -40,6 +43,16 @@ export default function Home({ data: initialData, error: serverError }: Props) {
   const popularPostsQuery = useQueryPopularPosts(
     initialData?.popularPostsResult
   );
+
+  function onPageChange(
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    currentPage: number
+  ) {
+    setPage(currentPage);
+    router.push({
+      hash: 'latest-articles',
+    });
+  }
 
   return (
     <>
@@ -63,29 +76,26 @@ export default function Home({ data: initialData, error: serverError }: Props) {
         {(data) => (
           <section aria-label="latest posts" tw="mt-2xl">
             <SectionHeader
+              id="latest-articles"
               title="Latest"
-              subTitle="All the web articles I have written"
+              subTitle={
+                <span tw="inline-flex gap-sm">
+                  All the web articles I have written
+                  <LoadingIndicator isLoading={latestPostsQuery.isFetching} />
+                </span>
+              }
             />
 
             <PostPreviewCardList posts={data.items} />
 
-            <LoadingIndicator isLoading={latestPostsQuery.isFetching} />
-            {/* <LoadingIndicator /> */}
-
-            <button
-              tw="disabled:text-textmuted mt-md"
-              disabled={data.next_page === null}
-              onClick={() => setPage((prev) => ++prev)}
-            >
-              Next
-            </button>
-            <button
-              tw="ml-md disabled:text-textmuted"
-              disabled={data.prev_page === null}
-              onClick={() => setPage((prev) => --prev)}
-            >
-              Previous
-            </button>
+            <footer tw="ml-auto flex gap-sm justify-end">
+              Go to page:
+              <Pagination
+                onItemClicked={onPageChange}
+                total={data.total}
+                perPage={data.perPage}
+              />
+            </footer>
           </section>
         )}
       </WithDataFetching>

@@ -38,6 +38,7 @@ export type PaginateResult<T> = {
   total: number;
   next_page_total: number;
   current_page: number;
+  perPage: number;
 };
 export function getPaginationResult<T>(
   items: T[],
@@ -60,6 +61,7 @@ export function getPaginationResult<T>(
     next_page_total,
     next_page: next_page_total > 0 ? page + 1 : null,
     prev_page: page > 1 ? page - 1 : null,
+    perPage,
   };
 }
 export function paginate<T>(items: T[], perPage: number, page: number): T[] {

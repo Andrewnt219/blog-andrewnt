@@ -5,8 +5,8 @@ type Props = {
   isLoading: boolean | null;
 };
 const LoadingIndicator = styled(ImSpinner3)<Props>`
-  ${tw` w-[1.5em] h-[1.5em]`}
-  ${(p) => (p.isLoading === false ? tw`invisible animate-spin` : tw`visible`)}
+  ${tw` w-[1.5em] h-[1.5em] animate-spin`}
+  ${(p) => (p.isLoading === false ? tw`invisible ` : tw`visible`)}
 `;
 
 export default LoadingIndicator;
