@@ -8,13 +8,17 @@ type Props = {
 function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
   return (
     <>
-      <Navbar />
+      <Navbar tw="px-2xl z-10" />
 
-      <main className={className} tw="flex-1">
+      {/* w-full so main is left aligned even without content */}
+      <main
+        className={className}
+        tw="flex-1 w-full mt-2xl mb-4xl max-w-5xl mx-auto px-2xl"
+      >
         {children}
       </main>
 
-      <Footer />
+      <Footer tw="all-child:(max-w-5xl px-2xl)" />
     </>
   );
 }
