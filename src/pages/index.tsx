@@ -1,5 +1,6 @@
 import { Result } from '$common';
 import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
+import HeaderMeta from '@layouts/Meta/HeaderMeta';
 import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
   createStaticProps,
@@ -121,4 +122,10 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   }
 };
 
-Home.getLayout = (page: ReactNode) => <DefaultLayout>{page}</DefaultLayout>;
+Home.getLayout = (page: ReactNode) => (
+  <DefaultLayout>
+    <HeaderMeta />
+
+    {page}
+  </DefaultLayout>
+);

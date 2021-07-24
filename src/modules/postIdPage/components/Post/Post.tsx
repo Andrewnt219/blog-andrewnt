@@ -1,6 +1,8 @@
+import HeaderMeta from '@layouts/Meta/HeaderMeta';
 import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
+import { getPostHeaderMeta } from '@modules/post/post-utils';
 import { ApiPatchIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
 import { useCurrentLocation } from '@root/src/hooks/useCurrentLocation';
 import { Button } from '@ui/Button/Button';
@@ -30,6 +32,7 @@ const Post: React.VFC<Props> = ({ post, className }) => {
     summary: post.description,
     title: post.title,
   };
+  const meta = getPostHeaderMeta(post);
 
   useEffect(() => {
     // TODO #2 add error modal and loading state
@@ -43,6 +46,7 @@ const Post: React.VFC<Props> = ({ post, className }) => {
 
   return (
     <section className={className} tw="">
+      <HeaderMeta _meta={meta} />
       <header tw="text-center">
         <h1 tw="text-h1 font-bold">{post.title}</h1>
         <p tw="text-textmuted">by Andrew N.T.</p>

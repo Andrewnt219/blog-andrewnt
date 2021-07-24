@@ -1,4 +1,5 @@
 import { Order } from '$common';
+import { Meta } from '@layouts/Meta/HeaderMeta';
 import { getPaginationResult } from '@utils/convert-js-utils';
 import { sortByDateString } from '@utils/sort-js-utils';
 import dayjs from 'dayjs';
@@ -90,4 +91,14 @@ export function filterPostData(
   if (options.order === 'desc') postData.reverse();
 
   return getPaginationResult(postData, options.perPage, options.page);
+}
+
+export function getPostHeaderMeta(post: PostData): Meta {
+  return {
+    date: new Date(post.publishedOn),
+    description: post.description,
+    thumbnail: `https://blog.andrewnt.dev${post.thumbnail.url}`,
+    title: post.title,
+    type: 'article',
+  };
 }
