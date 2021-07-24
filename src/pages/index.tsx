@@ -1,5 +1,5 @@
 import { Result } from '$common';
-import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
+import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
 import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
   createStaticProps,
@@ -26,7 +26,7 @@ import LoadingIndicator from '@ui/LoadingIndicator/LoadingIndicator';
 import { PaginateResult } from '@utils/convert-js-utils';
 import cloneDeep from 'lodash/cloneDeep';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 export default function Home({ data: initialData, error: serverError }: Props) {
@@ -121,4 +121,4 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   }
 };
 
-Home.WithLayout = WithDefaultLayout;
+Home.getLayout = (page: ReactNode) => <DefaultLayout>{page}</DefaultLayout>;
