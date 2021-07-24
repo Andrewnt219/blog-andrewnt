@@ -1,18 +1,19 @@
 import { Result } from '$common';
-import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
+import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
 import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
   createStaticProps,
   createStaticPropsError,
 } from '@modules/api/api-utils';
-import Post from '@modules/post/components/Post/Post';
 import {
   getAllPostSlugs,
   getPostDataFromSlug,
   PostData,
 } from '@modules/post/post-data-service';
+import Post from '@modules/postIdPage/components/Post/Post';
 import { usePost } from '@modules/postIdPage/hooks/usePost';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import { ReactNode } from 'react';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -56,4 +57,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     fallback: false,
   };
 };
-PostIdPage.WithLayout = WithDefaultLayout;
+
+PostIdPage.getLayout = (page: ReactNode) => (
+  <DefaultLayout>{page}</DefaultLayout>
+);

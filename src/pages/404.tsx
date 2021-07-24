@@ -1,4 +1,5 @@
-import { WithDefaultLayout } from '@layouts/DefaultLayout/DefaultLayout';
+import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
+import { ReactNode } from 'react';
 
 type Props = {
   className?: string;
@@ -11,6 +12,6 @@ function NotFound({ className }: Props) {
   );
 }
 
-NotFound.WithLayout = WithDefaultLayout;
+NotFound.getLayout = (page: ReactNode) => <DefaultLayout>{page}</DefaultLayout>;
 
 export default NotFound;

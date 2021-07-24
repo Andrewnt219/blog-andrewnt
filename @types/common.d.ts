@@ -17,7 +17,7 @@ declare module '$common' {
     ? ThenArgRecursive<U>
     : T;
 
-  type WithLayout = (page: ReactNode) => ReactNode;
+  type GetLayout = (page: ReactNode) => ReactNode;
 
   interface Objectable {
     getObject(): JustFields;

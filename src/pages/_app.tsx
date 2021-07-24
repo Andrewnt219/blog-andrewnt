@@ -1,4 +1,4 @@
-import { WithLayout } from '$common';
+import { GetLayout } from '$common';
 import { ColorThemeProvider } from '@modules/color-theme/ColorThemeContext';
 import GlobalStyles from '@styles/GlobalStyles';
 import type { AppProps } from 'next/app';
@@ -8,16 +8,16 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 const queryClient = new QueryClient();
 
 type Page = AppProps['Component'] & {
-  WithLayout?: WithLayout;
+  getLayout?: GetLayout;
 };
 function MyApp({ Component, pageProps }: AppProps) {
-  const WithLayout = (Component as Page).WithLayout ?? ((page) => page);
+  const getLayout = (Component as Page).getLayout ?? ((page) => page);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ColorThemeProvider>
         <GlobalStyles />
-        {WithLayout(<Component {...pageProps} />)}
+        {getLayout(<Component {...pageProps} />)}
       </ColorThemeProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />

@@ -1,4 +1,3 @@
-import { WithLayout } from '$common';
 import Footer from '@ui/navigation/Footer/Footer';
 import Navbar from '@ui/navigation/Navbar/Navbar';
 import React, { PropsWithChildren } from 'react';
@@ -23,9 +22,5 @@ function DefaultLayout({ className, children }: PropsWithChildren<Props>) {
     </>
   );
 }
-
-export const WithDefaultLayout: WithLayout = (page) => (
-  <DefaultLayout>{page}</DefaultLayout>
-);
 
 export default DefaultLayout;
