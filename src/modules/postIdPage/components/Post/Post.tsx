@@ -1,5 +1,4 @@
 import HeaderMeta from '@layouts/Meta/HeaderMeta';
-import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
 import { getPostHeaderMeta } from '@modules/post/post-utils';
@@ -36,12 +35,12 @@ const Post: React.VFC<Props> = ({ post, className }) => {
 
   useEffect(() => {
     // TODO #2 add error modal and loading state
-    axios
-      .patch<ApiPatchIncreaseViewCountResult>('/api/post/increaseViewCount', {
+    axios.patch<ApiPatchIncreaseViewCountResult>(
+      '/api/post/increaseViewCount',
+      {
         post_id,
-      })
-      .then((res) => console.log(res.data.data.view_count))
-      .catch((err) => console.error(getErrorMessage(err)));
+      }
+    );
   }, [post_id]);
 
   return (
