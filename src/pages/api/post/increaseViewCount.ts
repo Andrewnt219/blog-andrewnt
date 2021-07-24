@@ -14,7 +14,7 @@ import {
 import { NextApiHandler } from 'next';
 
 type Data = Pick<PostMeta, 'view_count'>;
-export type ApiPostIncreaseViewCountResult = ResultSuccess<Data>;
+export type ApiPatchIncreaseViewCountResult = ResultSuccess<Data>;
 const patch: NextApiHandler<Result<Data>> = async (req, res) => {
   const { post_id } = req.body;
 

@@ -1,15 +1,21 @@
 import { getErrorMessage } from '@modules/api/api-utils';
 import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
-import { ApiPostIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
-import { Button, ButtonLink } from '@ui/Button/Button';
+import { ApiPatchIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
+import { useCurrentLocation } from '@root/src/hooks/useCurrentLocation';
+import { Button } from '@ui/Button/Button';
 import Logo from '@ui/Logo/Logo';
+import {
+  createFaccebookShareLink,
+  createLinkedInShareLink,
+  createTwitterShareLink,
+  ShareLink,
+} from '@utils/create-js-utils';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { MDXRemote } from 'next-mdx-remote';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { FaHeart } from 'react-icons/fa';
 import tw, { styled } from 'twin.macro';
 import { PostData } from '../../post-data-service';
 
@@ -18,11 +24,17 @@ type Props = {
 };
 const Post: React.VFC<Props> = ({ post }) => {
   const { post_id } = post;
+  const currentLocation = useCurrentLocation();
+  const shareLink: ShareLink = {
+    url: currentLocation,
+    summary: post.description,
+    title: post.title,
+  };
 
   useEffect(() => {
     // TODO #2 add error modal and loading state
     axios
-      .patch<ApiPostIncreaseViewCountResult>('/api/post/increaseViewCount', {
+      .patch<ApiPatchIncreaseViewCountResult>('/api/post/increaseViewCount', {
         post_id,
       })
       .then((res) => console.log(res.data.data.view_count))
@@ -55,14 +67,6 @@ const Post: React.VFC<Props> = ({ post }) => {
         <MDXRemote {...post.content} components={MdxComponents} />
 
         <footer tw="mt-3xl space-y-xl">
-          <div tw="">
-            <h3 tw="font-bold">Was this article helpful?</h3>
-
-            <ButtonLink as="button" tw="inline-flex gap-sm items-center">
-              <FaHeart /> {post.like_count}
-            </ButtonLink>
-          </div>
-
           <div>
             <h3 tw="font-bold">Last updated</h3>
 
@@ -75,13 +79,37 @@ const Post: React.VFC<Props> = ({ post }) => {
             <h3 tw="font-bold">Share this article</h3>
 
             <div tw="mt-sm flex flex-col gap-sm md:flex-row">
-              <Button variant="contained" size="sm">
+              <Button
+                as="a"
+                href={createFaccebookShareLink(shareLink)}
+                target="_blank"
+                rel="noopener"
+                variant="contained"
+                size="sm"
+                tw="text-center"
+              >
                 Facebook
               </Button>
-              <Button variant="contained" size="sm">
+              <Button
+                as="a"
+                href={createTwitterShareLink(shareLink)}
+                target="_blank"
+                rel="noopener"
+                variant="contained"
+                size="sm"
+                tw="text-center"
+              >
                 Twitter
               </Button>
-              <Button variant="contained" size="sm">
+              <Button
+                as="a"
+                href={createLinkedInShareLink(shareLink)}
+                target="_blank"
+                rel="noopener"
+                variant="contained"
+                size="sm"
+                tw="text-center"
+              >
                 LinkedIn
               </Button>
             </div>
