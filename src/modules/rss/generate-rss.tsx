@@ -1,3 +1,4 @@
+import MdxComponents from '@modules/mdx/components/MdxComponents/MdxComponents';
 import {
   getAllPublishedPostMatter,
   PostMatter,
@@ -5,6 +6,8 @@ import {
 import { getLinkToPost } from '@modules/post/post-utils';
 import { Author, Feed } from 'feed';
 import fs from 'fs';
+import { MDXRemote } from 'next-mdx-remote';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 const today = new Date();
 const BASE_URL = 'https://blog.andrewnt.dev';
@@ -40,7 +43,10 @@ function addFeedItem(postMatter: PostMatter) {
     id: postUrl,
     link: postUrl,
     description: postMatter.description,
-    content: postMatter.description,
+
+    content: renderToStaticMarkup(
+      <MDXRemote {...postMatter.content} components={MdxComponents} />
+    ),
     author: [author],
     contributor: [author],
     date: new Date(postMatter.publishedOn),
