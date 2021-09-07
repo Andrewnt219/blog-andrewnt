@@ -17,6 +17,8 @@ export type FrontMatter = {
   title: string;
   description: string;
   thumbnail: {
+    author: string;
+    authorLink: string;
     width: number;
     height: number;
     url: string;

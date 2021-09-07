@@ -66,6 +66,16 @@ const Post: React.VFC<Props> = ({ post, className }) => {
             priority
           />
         </div>
+        <p tw="mt-md">
+          Photo by{' '}
+          <ButtonLink
+            href={post.thumbnail.authorLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {post.thumbnail.author}
+          </ButtonLink>
+        </p>
       </header>
 
       <StyledWrapper>

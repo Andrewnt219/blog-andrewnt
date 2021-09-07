@@ -10,6 +10,8 @@ export function initFrontMatter(): FrontMatter {
     title: '',
     description: '',
     thumbnail: {
+      author: '',
+      authorLink: '',
       height: -1,
       width: -1,
       url: '',
