@@ -17,7 +17,7 @@ const MdxComponents = {
   h6: (props: any) => <MdxTypography {...props} variant="h6" />,
   pre: (props: any) => <MdxTypography {...props} variant="pre" />,
   p: (props: any) => <MdxTypography {...props} />,
-  a: (props: any) => <ButtonLink {...props} />,
+  a: (props: any) => <ButtonLink target="_blank" rel="noopener" {...props} />,
   ul: (props: any) => <MdxUnorderedList {...props} />,
   ol: (props: any) => <MdxOrderedList {...props} />,
   li: (props: any) => <MdxListItem {...props} />,
