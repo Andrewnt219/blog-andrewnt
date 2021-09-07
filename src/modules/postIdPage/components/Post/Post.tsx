@@ -4,7 +4,7 @@ import MdxImage from '@modules/mdx/components/MdxImage/MdxImage';
 import { getPostHeaderMeta } from '@modules/post/post-utils';
 import { ApiPatchIncreaseViewCountResult } from '@pages/api/post/increaseViewCount';
 import { useCurrentLocation } from '@root/src/hooks/useCurrentLocation';
-import { Button } from '@ui/Button/Button';
+import { Button, ButtonLink } from '@ui/Button/Button';
 import Logo from '@ui/Logo/Logo';
 import {
   createFaccebookShareLink,
@@ -15,10 +15,12 @@ import {
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { MDXRemote } from 'next-mdx-remote';
+import NextLink from 'next/link';
 import * as React from 'react';
 import { PropsWithChildren, useEffect } from 'react';
 import tw, { styled } from 'twin.macro';
 import { PostData } from '../../../post/post-data-service';
+
 type Props = {
   post: PostData;
   className?: string;
@@ -70,6 +72,20 @@ const Post: React.VFC<Props> = ({ post, className }) => {
         <MDXRemote {...post.content} components={MdxComponents} />
 
         <footer tw="mt-3xl space-y-xl">
+          <div>
+            <StyledFooterHeader>Tags</StyledFooterHeader>
+
+            <StyledFooterContent as="ul" tw="flex gap-md flex-wrap">
+              {post.tags.map((tag) => (
+                <li key={tag}>
+                  <NextLink href={`/tag/${tag}`} passHref>
+                    <ButtonLink>#{tag}</ButtonLink>
+                  </NextLink>
+                </li>
+              ))}
+            </StyledFooterContent>
+          </div>
+
           <div>
             <StyledFooterHeader>Last updated</StyledFooterHeader>
 
