@@ -16,6 +16,7 @@ export function initFrontMatter(): FrontMatter {
     },
     publishedOn: '',
     isArchived: false,
+    tags: [],
   };
 }
 

@@ -56,7 +56,7 @@ export default function Home({ data: initialData, error: serverError }: Props) {
 
   return (
     <>
-      <WithDataFetching
+      {/* <WithDataFetching
         error={getFirstErrorMessage([serverError, popularPostsQuery.error])}
         data={popularPostsQuery.data}
       >
@@ -67,7 +67,7 @@ export default function Home({ data: initialData, error: serverError }: Props) {
             <PostPreviewCardList posts={data.items} />
           </section>
         )}
-      </WithDataFetching>
+      </WithDataFetching> */}
 
       <WithDataFetching
         error={getFirstErrorMessage([serverError, latestPostsQuery.error])}

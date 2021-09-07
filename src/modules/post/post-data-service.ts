@@ -23,6 +23,7 @@ export type FrontMatter = {
   };
   publishedOn: string;
   isArchived: boolean;
+  tags: string[];
 };
 export type PostData = PostMatter & PostMeta;
 export type FilterPostFn = (post: PostMatter) => boolean;

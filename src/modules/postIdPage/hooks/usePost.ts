@@ -12,6 +12,6 @@ export const usePost = (placeholderData: PostData | null) => {
     queryFn: ({ queryKey }) => queryPostData(queryKey[1]!),
     placeholderData,
     enabled: !isNullOrUndefined(postSlug),
-    staleTime: 30 * 1000,
+    staleTime: process.env.NODE_ENV === 'production' ? 30 * 1000 : 0,
   });
 };

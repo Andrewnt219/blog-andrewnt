@@ -44,7 +44,12 @@ function addFeedItem(postMatter: PostMatter) {
     author: [author],
     contributor: [author],
     date: new Date(postMatter.publishedOn),
+    image: BASE_URL + `/images/${postMatter.slug}/hero.jpg`,
   });
+
+  for (const tag of postMatter.tags) {
+    feed.addCategory(tag);
+  }
 }
 
 export default async function generateRss() {
