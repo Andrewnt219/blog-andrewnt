@@ -16,6 +16,7 @@ const author: Author = {
   email: 'hey@andrewnt.dev',
   link: BASE_URL,
 };
+const categories = ['Web development', 'Programming', 'IT'];
 
 const feed = new Feed({
   title: "Andrew's Blog",
@@ -51,15 +52,16 @@ function addFeedItem(postMatter: PostMatter) {
     contributor: [author],
     date: new Date(postMatter.publishedOn),
     image: BASE_URL + `/images/${postMatter.slug}/hero.jpg`,
+    category: postMatter.tags.map((tag) => ({ name: tag })),
   });
-
-  for (const tag of postMatter.tags) {
-    feed.addCategory(tag);
-  }
 }
 
 export default async function generateRss() {
   const postMatters = await getAllPublishedPostMatter();
+
+  for (const category in categories) {
+    feed.addCategory(category);
+  }
 
   postMatters.forEach(addFeedItem);
 
