@@ -3,7 +3,7 @@ import DefaultLayout from '@layouts/DefaultLayout/DefaultLayout';
 import HeaderMeta from '@layouts/Meta/HeaderMeta';
 import WithDataFetching from '@layouts/WithDataFetching/WithDataFetching';
 import {
-  createStaticProps,
+  createResultSuccess,
   getFirstErrorMessage,
   handleStaticPropsError,
 } from '@modules/api/api-utils';
@@ -121,10 +121,13 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       popularPostsQuery
     );
 
-    return createStaticProps({
-      latestPostsResult,
-      popularPostsResult,
-    });
+    return {
+      revalidate: 60,
+      props: createResultSuccess({
+        latestPostsResult,
+        popularPostsResult,
+      }),
+    };
   } catch (error) {
     return handleStaticPropsError(error);
   } finally {
