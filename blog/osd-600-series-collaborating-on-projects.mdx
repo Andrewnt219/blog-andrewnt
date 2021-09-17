@@ -1,0 +1,59 @@
+---
+title: '[OSD600 Series] Collaborating on projects'
+description: Experience of reviewing code and testing with classmates
+thumbnail:
+  author: Scott Graham
+  authorLink: https://unsplash.com/@homajob?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1601
+  url: /images/osd-600-series-collaborating-on-projects/hero.jpg
+isArchived: false
+publishedOn: 2021-09-17T23:00:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Networking
+
+`Rust` is not as common as other languages like `JavaScript` and `TypeScript`, so it was a bit harder to find a partner who was willing to do a code review with me. Eventually, [Antonio](https://github.com/Antonio-Bennett), who was also interested in learning Rust, contacted me and we started collaborating.
+
+## Testing & Code Reviews
+
+Reading someone else code when I just learned the language was both eye-opening and confusing at the same time. There were syntax or language mechanics that Antonio knew but I didn't, and vice versa. It was also nice to see a different approach to the same problem.
+
+I was impressed that Antonio write the logic for parsing CLI's arguments from scratch. I was trying to do that at first, but there was so many edge cases so I was discouraged and just used [an existing crate](https://github.com/clap-rs/clap) instead.
+
+There were some issues with Antonio's program:
+
+- The program allow empty value for `--input`, and created an empty `dist` [#1](https://github.com/Antonio-Bennett/rssg/issues/1)
+
+- Code should be separated into modules for readability [#2](https://github.com/Antonio-Bennett/rssg/issues/2)
+
+- When passing a file as `--input`, the program exited [#3](https://github.com/Antonio-Bennett/rssg/issues/3)
+
+Antonio also found some bugs on my program:
+
+- Handled error should exit with code 0 [#15](https://github.com/Andrewnt219/paper/issues/15)
+
+- `dist` is generated in the current directory of running the command [#14](https://github.com/Andrewnt219/paper/issues/14)
+
+- The program crashed when not running from the root directory [#13](https://github.com/Andrewnt219/paper/issues/13)
+
+## Fixing
+
+I wasn't able to fix issue [#14](https://github.com/Andrewnt219/paper/issues/14) due to the lack of means to get the path to root crate in Rust. From what I have researched, after the program is compiled, Rust does not aware of the file system anymore, so there is no tale where the root of the cwd is.
+
+## Revising
+
+Testing the code on my own is never enough. Getting my code tested from a different run-time environment and perspective exposes more bugs and potential improvement.
+
+## Additional Resources
+
+- [`paper` SSG](https://github.com/Andrewnt219/paper)
+- [`paper` sample website](https://paper-sample.vercel.app/)
+- [`rssg` SSG](https://github.com/Antonio-Bennett/rssg)
+
+Read [how the SSG `paper` is built](/post/building-a-ssg-with-rust).
