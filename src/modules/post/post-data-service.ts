@@ -4,7 +4,11 @@ import matter from 'gray-matter';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import path from 'path';
 import { getPostMeta, PostMeta } from './post-meta-service';
-import { assertFrontMatter, filterPostNotArchived } from './post-utils';
+import {
+  assertFrontMatter,
+  filterPostNotArchived,
+  filterPublishedPost,
+} from './post-utils';
 
 //#region types
 
@@ -44,7 +48,7 @@ const BLOG_PATH = path.join(ROOT_FOLDER, 'blog');
 export async function getAllPublishedPostData(): Promise<PostData[]> {
   const postSlugs = getAllPostSlugs();
   const postDataList = await Promise.all(postSlugs.map(getPostDataFromSlug));
-  const publishedPostDataList = postDataList.filter(filterPostNotArchived);
+  const publishedPostDataList = postDataList.filter(filterPublishedPost);
 
   return publishedPostDataList;
 }

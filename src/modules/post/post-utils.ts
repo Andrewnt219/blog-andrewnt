@@ -42,8 +42,16 @@ export function getLinkToPost(postSlug: string) {
   return `/post/${postSlug}`;
 }
 
+export function filterPublishedPost(postMatter: PostMatter) {
+  return filterScheduledPost(postMatter) && filterPostNotArchived(postMatter);
+}
+
 export function filterPostNotArchived(postMatter: PostMatter) {
   return !postMatter.isArchived;
+}
+
+export function filterScheduledPost(postMatter: PostMatter) {
+  return dayjs(postMatter.publishedOn).isBefore(new Date());
 }
 
 export function filterPostPublishOn(fromDate: Date, toDate: Date) {
