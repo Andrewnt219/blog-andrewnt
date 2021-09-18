@@ -1,0 +1,110 @@
+---
+title: Building a Static Site Generator (SSG) with Rust
+description: Thoughts on the process of building the SSG paper
+thumbnail:
+  author: Louis Reed
+  authorLink: https://unsplash.com/@_louisreed?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1599
+  url: /images/building-a-ssg-with-rust/hero.jpg
+isArchived: false
+publishedOn: 2021-09-17T23:00:00-0400
+tags:
+  - rust
+---
+
+Recently, I have been interested in learning Rust, which is much different from my comfortable bed of TypeScript. I was curios [why so many developer like it](https://insights.stackoverflow.com/survey/2021). Therefore, I'll build an actual program with it to see for myself.
+
+## Table of Contents
+
+## About the projects
+
+Read more about installation and examples [here](https://github.com/Andrewnt219/paper)
+
+The main feature of `paper` is parsing text files (such as .txt or .docx) into their corresponding html version.
+
+The tools recursively goes through the source directory, and generate a `dist` dir that keeps the same folder structure as the source file.
+
+It also generate an `index.html` which indexes all the links to .html files inside `dist`.
+
+```bash
+$ cargo run -- --help
+
+USAGE:
+    paper.exe [OPTIONS]
+
+FLAGS:
+    -h, --help       Print help information
+    -V, --version    Print version information
+
+OPTIONS:
+    -i, --input <FILE>...             Path to file(s)
+    -o, --output <FILE>               Path to output file
+    -s, --stylesheet <URL or FILE>    Link to stylesheet
+```
+
+## Code separation
+
+What I love about this project so much is the ease of introducing new features. Let's look at the project' structure.
+
+```
+  .
+  +-- src
+      +-- cli
+      |   +-- arg_parser.rs
+      |   +-- generator.rs
+      |   +-- mod.rs
+      +-- file_parser
+      |   +-- asset
+      |   |   +-- template.html
+      |   +-- source_file.rs
+      |   +-- template_file.rs
+      |   +-- mod.rs
+      +-- main.rs
+
+```
+
+There are two modules represent the two main features:
+
+- `cli` has all the logic for working with parsing and caching CLI arguments, as well as running the program
+
+- `file_parser` has all the logic for working with reading and parsing the content of file_parser
+
+### mod `cli`
+
+```
+  .
+  +-- src
+      +-- cli
+      |   +-- arg_parser.rs
+      |   +-- generator.rs
+      |   +-- mod.rs
+
+```
+
+The `cli` includes `Generator` and `ArgsParser`.
+
+`ArgsParser` has a single responsibility: to parse the arguments from the CLI and cache it.
+
+`Generator` acts as a coordinator, controling the flow of the program. It sends out users' input to modules and generate the corresponding results.
+
+`ArgsParser` is injected into `Generator`. Currently, `ArgsParser` is a wrapper on top of `clap.rs`, but it can be easily switched to another library. As long as the parser provides parsed arguments, `Generator` is happy.
+
+### mod `file_parser`
+
+```
+  .
+  +-- src
+      +-- file_parser
+      |   +-- asset
+      |   |   +-- template.html
+      |   +-- source_file.rs
+      |   +-- template_file.rs
+      |   +-- mod.rs
+```
+
+`file_parser` includes `SourceFile` and `Template`
+
+`SourceFile` represents the parsed text file (raw data). It has all the logic to parse and store the read content.
+
+`Template` represents the html file (dist file). The destination where it should be is separated from the class to keep its single reposibility of converting text to html. In the future, if there's a need for parsing more than just paragraphs (e.g. anchor, image, etc.), they will also be inside `Template`.
