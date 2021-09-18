@@ -9,21 +9,14 @@ import {
 } from '@modules/api/api-utils';
 import PostPreviewCardList from '@modules/homepage/components/PostPreviewCardList/PostPreviewCardList';
 import SectionHeader from '@modules/homepage/components/SectionHeader/SectionHeader';
-import {
-  latestPostsQuery,
-  useQueryLatestPosts,
-} from '@modules/homepage/hooks/useQueryLatestPosts';
-import {
-  popularPostsQuery,
-  useQueryPopularPosts,
-} from '@modules/homepage/hooks/useQueryPopularPosts';
+import { latestPostsQuery } from '@modules/homepage/hooks/useQueryLatestPosts';
+import { popularPostsQuery } from '@modules/homepage/hooks/useQueryPopularPosts';
 import {
   getAllPublishedPostData,
   PostData,
 } from '@modules/post/post-data-service';
 import { filterPostData } from '@modules/post/post-utils';
 import generateRss from '@modules/rss/generate-rss';
-import LoadingIndicator from '@ui/LoadingIndicator/LoadingIndicator';
 import Pagination from '@ui/Pagination/Pagination';
 import { PaginateResult } from '@utils/convert-js-utils';
 import cloneDeep from 'lodash/cloneDeep';
@@ -36,13 +29,13 @@ export default function Home({ data: initialData, error: serverError }: Props) {
   const [page, setPage] = useState<number>(1);
   const router = useRouter();
 
-  const latestPostsQuery = useQueryLatestPosts(
-    page,
-    initialData?.latestPostsResult
-  );
-  const popularPostsQuery = useQueryPopularPosts(
-    initialData?.popularPostsResult
-  );
+  // const latestPostsQuery = useQueryLatestPosts(
+  //   page,
+  //   initialData?.latestPostsResult
+  // );
+  // const popularPostsQuery = useQueryPopularPosts(
+  //   initialData?.popularPostsResult
+  // );
 
   function onPageChange(
     ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -70,8 +63,8 @@ export default function Home({ data: initialData, error: serverError }: Props) {
       </WithDataFetching> */}
 
       <WithDataFetching
-        error={getFirstErrorMessage([serverError, latestPostsQuery.error])}
-        data={latestPostsQuery.data}
+        error={getFirstErrorMessage([serverError])}
+        data={initialData?.latestPostsResult}
       >
         {(data) => (
           <section aria-label="latest posts" tw="mt-2xl">
@@ -81,7 +74,7 @@ export default function Home({ data: initialData, error: serverError }: Props) {
               subTitle={
                 <span tw="inline-flex gap-sm">
                   All the web articles I have written
-                  <LoadingIndicator isLoading={latestPostsQuery.isFetching} />
+                  {/* <LoadingIndicator isLoading={latestPostsQuery.isFetching} /> */}
                 </span>
               }
             />
