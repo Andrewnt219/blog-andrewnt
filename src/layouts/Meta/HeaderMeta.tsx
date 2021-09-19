@@ -34,12 +34,12 @@ function HeaderMeta({ _meta }: Props) {
         href={`https://blog.andrewnt.dev${router.asPath}`}
       />
       <meta property="og:type" content={meta.type} />
-      <meta property="og:site_name" content="Lee Robinson" />
+      <meta property="og:site_name" content="Andrew Nguyen's blog" />
       <meta property="og:description" content={meta.description} />
       <meta property="og:title" content={meta.title} />
       <meta property="og:image" content={meta.thumbnail} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@leeerob" />
+      <meta name="twitter:site" content="@andrewnt219" />
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.thumbnail} />
