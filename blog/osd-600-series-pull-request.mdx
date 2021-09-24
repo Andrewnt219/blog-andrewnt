@@ -1,0 +1,77 @@
+---
+title: '[OSD600 Series] Pull request'
+description: Contributing to classmates' repo
+thumbnail:
+  author: James Padolsey
+  authorLink: https://unsplash.com/@padolsey?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1800
+  url: /images/osd-600-series-collaborating-on-projects/hero.jpg
+isArchived: false
+publishedOn: 2021-09-24T12:24:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## The pull request
+
+- Upstream repo: [https://github.com/hphan9/shinny-ssg](https://github.com/hphan9/shinny-ssg)
+
+- Forked repo: [https://github.com/Andrewnt219/shinny-ssg](https://github.com/Andrewnt219/shinny-ssg)
+
+- Closed issue: [https://github.com/hphan9/shinny-ssg/issues/5](https://github.com/hphan9/shinny-ssg/issues/5)
+
+- Merged PR: [https://github.com/hphan9/shinny-ssg/pull/7](https://github.com/hphan9/shinny-ssg/pull/7)
+
+Thanks to folder structure of the repo, I could quickly find the file to put my logic in. My first step was enabling reading markdow file. Because the project had been designed for .txt files only in mind, there were several places to change. Took me a few runs to get the right Regex.
+
+After being able to convert the .md files into .html, I started adding support for bold text. As first, I was thinking of replacing the double asteriks (\*\*) with `<strong>`, but it was cumbersome to identify which double asterisks was the closing tag. In the end, I went with group matching replacement.
+
+```csharp
+    // Parse the markdown line into html
+    private string ParseMarkdownLine(string line)
+    {
+      // If aiming for performance,
+      // ...use named groups and try to match italic, underline, etc.
+      // This matches anything between double asterisks
+      string boldPattern = @"\*\*(.*?)\*\*";
+      string boldReplacement = "<strong>$1</strong>";
+
+      return Regex.Replace(line, boldPattern, boldReplacement);
+    }
+```
+
+As with all regexs, I left a helpful comment to state what it "should" do.
+
+There was a problem with my commit. My IDE autoformat the whole file on saved, and it changed all the indentation, which was not visible when looking at the changes from GitLens of Visual Studio Code. On GitHub, it looked like I had alternated the whole file.
+
+I send a pull request to the upstream repo, no conflict fortunately. It was not really a big change, so the PR was quickly merged.
+
+## Approving pull request
+
+- Upstream repo: [https://github.com/Andrewnt219/paper](https://github.com/Andrewnt219/paper)
+
+- Forked repo: [https://github.com/JerryHue/paper](https://github.com/JerryHue/paper)
+
+- Closed issue: [https://github.com/Andrewnt219/paper/issues/24](https://github.com/Andrewnt219/paper/issues/24)
+
+- Merged PR: [https://github.com/Andrewnt219/paper/pull/28](https://github.com/Andrewnt219/paper/pull/28)
+
+Gerardo did a thoroughout research on markdown, and helped me understand the reason why he did not use Regex. To be honest, I'm still new to Rust, reviewing code was not as straight forward as reviewing TypeScripts changes. I constantly stumped upon unknown methods, and then questioned myself if those were a built-in methods or something that was introduced somewhere inside the changes. I merged the PR eventually, but I have to spend more time later to take a deeper look at the changes. It's actually a good chance to improve my knowledge.
+
+## Revision
+
+I have learnt to stop the urge to change everything just because I think it would be "better". Focusing only on the feature that I had proposed and respecting the code's style of the repo owner.
+
+It's also a good practice to break down the feature into meaningful small commits. It helps the reviewer to understand my changes better.
+
+```bash:Joke
+10 lines of code = 10 issues.
+
+500 lines of code = "looks fine."
+
+Code reviews.
+```
