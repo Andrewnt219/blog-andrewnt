@@ -1,0 +1,49 @@
+---
+title: 'REIMAGINE: Designing files structure for a SSG (C#)'
+description: A C# version of the original paper built with Rust
+thumbnail:
+  author: Louis Reed
+  authorLink: https://unsplash.com/@_louisreed?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1599
+  url: /images/reimagine-designing-files-structure-for-a-SSG/hero.jpg
+isArchived: false
+publishedOn: 2021-09-28T18:00:00-0400
+tags:
+  - CSharp
+---
+
+This is the sequence of [Designing files structure for a SSG (Rust)](/post/design-pattern-for-simple-ssg)
+
+## Table of Contents
+
+## What's new
+
+### Class `ParseResult`
+
+With the additional request for parsing Markdown, `paper` C# implementation removed the `SourceFile` class and implemented different class for each type (i.e. `MarkdownFile` and `TextFile`). `Template` is named more concisely as `HtmlFile`. Anything that genereate `ParseResult` (like `MarkdowFile.Parse()` or `TextFile.Parse()` can convert the result to .html using `HtmlFile.Parse()`. This removes the reduntdant of html parsing logic, and can easily supports and future file types.
+
+### Separation of file types
+
+Separating the old `SourceFile` into `MarkdownFile` and `TextFile` also help organize the methods used by different file types.
+
+## C# vs Rust
+
+Coding in C# certainly has less overhead to worry about (e.g. memory management), but Rust is undoubtedly more performant. As a fun experiment, I had an input directory like this
+
+<Image
+  src="/images/reimagine-designing-files-structure-for-a-SSG/experiment.jpg"
+  width={1872}
+  height={910}
+  alt="folder structure of the experiment"
+/>
+
+The logic for both implemenetation are identical, but C# took ~5 seconds to generate the output. Meanwhile, Rust was ~1 second. Mind blowing.
+
+## Additional links
+
+- [paper (Rust)](https://github.com/Andrewnt219/paper)
+
+- [paper (C#)](https://github.com/Andrewnt219/paper-csharp)
+
+_Originally posted at [https://andrewnt.dev/reimagine-designing-files-structure-for-a-ssg-c](https://andrewnt.dev/reimagine-designing-files-structure-for-a-ssg-c)_
