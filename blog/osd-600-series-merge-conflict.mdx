@@ -1,0 +1,37 @@
+---
+title: Merge, conflict!
+description: This week on branches and resolving merge conflicts
+thumbnail:
+  author: Chris Sabor
+  authorLink: https://unsplash.com/@chrissabor?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/design-pattern-for-simple-ssg/hero.jpg
+isArchived: false
+publishedOn: 2021-09-28T22:00:00-0400
+tags:
+  - osd600
+  - git
+---
+
+## Table of Contents
+
+## New features 🎉
+
+`paper` now supports hr markdown syntax `---` and `lang` flag for specifying language inside generated .html files.
+
+- [repo](https://github.com/Andrewnt219/paper-csharp)
+
+- [`lang` support: issue](https://github.com/Andrewnt219/paper-csharp/issues/1)
+
+- [`lang` support: commit](https://github.com/Andrewnt219/paper-csharp/commit/b76556c2bf71f77dcab372e01c46ddcc0880ac5b)
+
+- [hr markdown support: issue](https://github.com/Andrewnt219/paper-csharp/issues/2)
+
+- [hr markdown support: commit](https://github.com/Andrewnt219/paper-csharp/commit/f577b4a4915e202c2d5204c070563e77ff183b8d)
+
+Fortunately, the two commits didn't have any conflicts. The first one was fast-forward, and the second one was merged recursively without me doing anything. But, I learnt that rebasing commits are more preferable for merging branches. To sync up with the main branch, instead of `git merge main`, you do `git rebase main`. Rebasing walks you through all your changes that cause conflicts, and at the end, creates a linear commits history. In other words, `git merge` resolves conflicts by smashing the two branch together and create a new commit to resolve those conflicts. Meanwhile, `git rebase` lifts off your branch base commit (the commit where your branch detaches from the main branch), and put that base at the HEAD of main branch. Neat.
+
+## Additional resources
+
+- [Merging vs. Rebasing by Atlassian](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
