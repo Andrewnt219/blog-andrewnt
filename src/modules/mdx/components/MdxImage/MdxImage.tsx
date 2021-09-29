@@ -21,7 +21,7 @@ type StyledWraperProps = {
 };
 
 const StyledWrapper = styled.div<StyledWraperProps>`
-  ${tw`mt-md md:mt-xl w-full`}
+  ${tw`mt-md md:mt-xl w-full flex justify-center`}
 
   & img {
     ${tw`rounded (border border-solid border-bordercolor)! `}
