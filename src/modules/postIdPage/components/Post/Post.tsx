@@ -58,8 +58,9 @@ const Post: React.VFC<Props> = ({ post, className }) => {
 
         <div tw="w-full mt-xl md:mt-3xl">
           <MdxImage
+            tw="block"
             src={post.thumbnail.url}
-            alt="lorem ipsum demat"
+            alt="Hero image"
             layout="responsive"
             width={post.thumbnail.width}
             height={post.thumbnail.height}

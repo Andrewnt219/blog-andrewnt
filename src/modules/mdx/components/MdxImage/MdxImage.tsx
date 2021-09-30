@@ -3,7 +3,6 @@ import tw, { styled } from 'twin.macro';
 
 type Props = ImageProps &
   Pick<StyledWraperProps, 'isRestrained'> & {
-    className?: string;
     alt: string;
   };
 function MdxImage({ className, isRestrained, ...props }: Props) {
