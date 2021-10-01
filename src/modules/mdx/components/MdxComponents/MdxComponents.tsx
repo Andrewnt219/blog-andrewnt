@@ -1,13 +1,11 @@
-import dynamic from 'next/dynamic';
 import CustomLink from '../CustomLink/CustomLink';
 import MdxImage from '../MdxImage/MdxImage';
 import { MdxOrderedList, MdxUnorderedList } from '../MdxList/MdxList';
 import MdxListItem from '../MdxListItem/MdxListItem';
 import { MdxTypography } from '../MdxTypography/MdxTypography';
-const Example = dynamic(() => import('../Example/Example'));
+import MdxVideo from '../MdxVideo/MdxVideo';
 
 const MdxComponents = {
-  Example,
   Image: MdxImage,
   h1: (props: any) => <MdxTypography {...props} variant="h1" />,
   h2: (props: any) => <MdxTypography {...props} variant="h2" />,
@@ -21,6 +19,7 @@ const MdxComponents = {
   ul: (props: any) => <MdxUnorderedList {...props} />,
   ol: (props: any) => <MdxOrderedList {...props} />,
   li: (props: any) => <MdxListItem {...props} />,
+  Video: MdxVideo,
 };
 
 export default MdxComponents;
