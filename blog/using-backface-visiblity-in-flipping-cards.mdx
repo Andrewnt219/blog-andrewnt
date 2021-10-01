@@ -1,0 +1,109 @@
+---
+title: Using backface-visiblity in flipping cards
+description: The role of backface-visilbity in flipping cards effect
+thumbnail:
+  author: Amanda Jones
+  authorLink: https://unsplash.com/@amandagraphc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1599
+  url: /images/using-backface-visiblity-in-flipping-cards/hero.jpg
+isArchived: false
+publishedOn: 2021-09-30T09:41:00-0400
+tags:
+  - css
+---
+
+## Stripe's UI bug
+
+If you are just here for `backface-visibility`, you can go straight to the next section
+
+I was looking at [Stripe's interns page](https://stripe.com/en-ca/jobs/university) when I found out a weird UI bug. All the images became blurry when flipped.
+
+<Video src="/images/using-backface-visiblity-in-flipping-cards/1.mp4" />
+
+It was intriguing. Initially, I thought maybe the images were not cached and it had to be refetched and took time to load. But, it wasn't exactly the case. Even though the images were already loaded (look at the Waterfall column), they were still blurry.
+
+<Video src="/images/using-backface-visiblity-in-flipping-cards/2.mp4" />
+
+So my second guess was that some CSS rules messed them up. To make it easier for debugging, I disabled Javascript so the cards would stop flipping on their own.
+
+You can disable JavaScript in Chrome by pressing `Ctrl + Shift + P`, and search for "Disable JavaScript" in the Chrome DevTools
+
+First, we can take a look the structure of a card (or `PhotoGrid_item`)
+
+```html
+<div
+  class="PhotoGrid__item js-photo-grid-item"
+  data-load-order="5"
+  data-rotation="1620"
+  data-orientation="horizontal"
+>
+  <div
+    class="PhotoGrid__flippable js-flippable"
+    style="transform: rotateY(1620deg);"
+  >
+    <div class="PhotoGrid-item__front js-front">
+      <div
+        class="PhotoGrid__smallImage"
+        style='background-image: url("https://b.stripecdn.com/site-srv/assets/img/v3/jobs_v2/university/grid/design-interns-small-9e65d64db97d308f746447a80e137d81ee7e7f5835cfef14d9c5021406e272bf.jpg");'
+      ></div>
+      <div
+        class="PhotoGrid__largeImage PhotoGrid__largeImage--loaded"
+        style='background-image: url("https://b.stripecdn.com/site-srv/assets/img/v3/jobs_v2/university/grid/screens-8ce9fb8ed8c5074b06fe825fb9032e863dbcdc55c907ba2d109631f86d1c3ec4.jpg");'
+      ></div>
+    </div>
+
+    <div class="PhotoGrid-item__back js-back">
+      <div class="PhotoGrid__smallImage"></div>
+      <div
+        class="PhotoGrid__largeImage"
+        style='background-image: url("https://b.stripecdn.com/site-srv/assets/img/v3/jobs_v2/university/grid/hackathon-7e59b71bd3e259d3c1e311a5dc271e04513b1114190d98f682ab8fcbc3ceba0e.jpg");'
+      ></div>
+    </div>
+  </div>
+</div>
+```
+
+If it is a bit hard to make sense, let's me walk you through. Basically, the card has two faces `PhotoGrid-item__front` and `PhotoGrid-item__back`, both faces show a different image. This helps the flipping effect. When a card is flipped, it just needs to rotate to the other face by using CSS `transform: rotateY(180deg)`.
+
+If you wonder about the `smallImage` and `largeImage` classes, those one are used for enhancing UX. When the real image (or `largeImage`) is still loading, the website shows the `smallImage`, which is a tiny version of the real image that is also streched to the size of the real image. That's why you see the blurry images first on many website before the real image show up.
+
+That's also my second guess for where the problem was. I thought that Stripe forgot to hide the `smallImage` after the `largeImage` has loaded. Easy peasy, deleting the `smallImage` of the front face should solve the problem.
+
+Or not, I'm running out of solutions here...
+
+## The `backface-visiblity`
+
+After digging around the CSS, I spotted the cards were all using `background visiblity: hidden`
+
+```css
+.PhotoGrid .PhotoGrid-item__back,
+.PhotoGrid .PhotoGrid-item__front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -webkit-backface-visibility: hidden; /* <-- This is the cause */
+  backface-visibility: hidden; /* <-- This is the cause */
+  border-radius: var(--cardRadius);
+}
+```
+
+Eureka, the problem was solved just by removing those two lines. I worked with flipping cards on [one of my side projects](https://andrewnt219.github.io/tamago-sushi-bar/#/) before, and the we need `backface-visibility: hidden` in order to hide the elements that are at the back of the card. Here's an example.
+
+With `backface-visiblity:hidden`
+
+<Video src="/images/using-backface-visiblity-in-flipping-cards/3.mp4" />
+
+Without `backface-visiblity:hidden`
+
+<Video src="/images/using-backface-visiblity-in-flipping-cards/4.mp4" />
+
+As you can see, the back of the cards (which mirrored text) are showing even though we are currently showing the front of the card to users. In Stripe's case, there is no need for `backface-visibility:hidden` on `PhotoGrid_largeImage` and `PhotoGrid_smallImage`, just put on the front and back container (i.e. `PhotoGird-item__back`, `PhotoGrid-item__front`) should be enough.
+
+<Video src="/images/using-backface-visiblity-in-flipping-cards/5.mp4" />
+
+Cheers 🥂
+
+_Originally posted on [andrewnt.dev](https://andrewnt.dev/using-backface-visiblity-in-flipping-cards)_
