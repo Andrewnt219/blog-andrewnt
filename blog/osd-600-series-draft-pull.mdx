@@ -1,0 +1,66 @@
+---
+title: '[OSD600 Series] Draft pull'
+description: This week on working with remote branches
+thumbnail:
+  author: Ronald Carreño
+  authorLink: https://pixabay.com/users/ronaldcandonga-17383039/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=5382501
+  width: 1920
+  height: 1155
+  url: /images/osd-600-series-draft-pull/hero.jpg
+isArchived: false
+publishedOn: 2021-10-08T17:00:00-0400
+tags:
+  - osd600
+  - git
+---
+
+## Table of Contents
+
+## New features 🎉
+
+[trangntt-016/static-site-generator](https://github.com/trangntt-016/static-site-generator) now supports passing config file as an alternate to CLI arguments.
+
+```bash
+$ jssg -c path/to/ssg-config.json
+
+# or
+
+$ jssg --config path/to/ssg-config.json
+```
+
+The solution is simple. All the changes happen in the constructor `JssgApplication` (entry point of the program). If a path to a config file is passed, the appplication ignores all other values and is initialized by values from the config file instead. 
+
+Most problem didn't come from the code itself, but from working with maven. I couldn't find the `jssg-0.0.1-SNAPSHOT.jar` mentioned inside the project README. So I came back to the issue and asked Trang for clarification. I had never worked with a Java project so I didn't know I had to run `mvn install`, which was just like `npm install` for installing dependencies. A reminder of what seems to be pretty obvious for some developers, but is obscure for others that have different programming backgrounds.
+
+After that, I ran into another problem. I kept running `mvn compile` but the new changes weren't reflect. Eventually, I figured out I had to run `mvn install` or `mvn package` instead. Pretty weird but I didn't mind. Adding a new dependency was also quite different.
+
+## About git remotes
+
+Unfortunately, no issues has been filed on my two repos. Today is the due date and seems like everyone else already has a repo to work on. I'll sum up what I know about `git remote`, `git fetch`, `git pull` and `git checkout` a remote bracnh instead.
+
+With `git remote`, you can manage your remote branches.
+
+```bash
+$ git remote add <name-of-student> <https://git-url-of-other-studnet-fork.git>
+```
+
+This will add another remote repo from `https://git-url-of-other-studnet-fork.git` to your local, as alias `name-of-student`. Now you can use `name-of-student` to refer to this remote repo in other git commands.
+
+With `git fetch`, you can get or update all the branches from a remote repo to your local.
+
+```bash
+$ git fetch <name-of-student>
+```
+
+In order to run above command, `name-of-student` has to be added using `git remote`. This get/update all the branches from the remote repo `name-of-student`, but does not perform `git merge`.
+
+`git pull` has similar function as `git fetch`, but it does an additional command at the end, which is `git merge`.
+
+You can also checkout a remote branch by using
+
+```bash
+$ git checkout -b <branch-name> <name-of-student>/<branch-name>
+```
+
+This shows you the working branches of the remote repo `name-of-student` on branch `branch-name`. In other words, you now has the new changes on your local, so you can run tests on it or do whatever you want before merging the changes.
+
