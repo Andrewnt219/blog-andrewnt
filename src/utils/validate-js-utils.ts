@@ -29,5 +29,5 @@ export function isNumberStrict(num: unknown): num is number {
 }
 
 export function isBrowser() {
-  return isNullOrUndefined(process.env['IS_BROWSER']);
+  return  ![typeof window, typeof document].includes('undefined');
 }
