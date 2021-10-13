@@ -1,0 +1,81 @@
+---
+title: '[OSD600 Series] Refactor & Rebase'
+description: This week on working with smelly code and git rebase
+thumbnail:
+  author: Josh Beech
+  authorLink: https://unsplash.com/@ig_joshabeech?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-series-rebase/hero.jpg
+isArchived: false
+publishedOn: 2021-10-13T16:00:00-0400
+tags:
+  - osd600
+  - open-source
+  - git
+---
+  
+
+## Table of Contents
+
+## Refactor
+
+
+When I do refactoring, I mostly focus on code responsibility and readability. I try to have all functions looking like this: 
+
+```ts
+function doSomething() 
+{
+  if(isInvalid) {
+    return;
+  }
+
+  doStep1();
+
+  if(hasError) 
+  {
+    throw new Error()    
+  }
+  
+  doStep2();
+
+  doStep3();
+}
+```
+
+Basically, I often break large functions down to smaller chunks. That way, I can skim through methods and understand what they do just by looking at functions that it called. 
+
+Fortunately, I mostly did logic extraction and renaming, so the program didn't break. I was able to fix one small bug though, by re-reading the documentation when I refactored the `ArgsParser`.
+
+### refactor: remove duplicate parsing in ArgsParser
+
+There was an implementation that had bugged me for a while. I was kind of storing the parsed CLI arguments in 2 places: `ArgsParser` and `Options`. Therefore, everytime I added a new flag, I had to add the flag in both classes. 
+
+Since I used a [third-party library](https://github.com/commandlineparser/commandline), they suggested calling another method that received the `Options` (e.g. `Run(Options opts)`) in `Main`. However, I don't like exposing the parsing implementation of `ArgsParser` to the outside. It's like: "I don't care what the `ArgsParser` does, just give me back the parsed arguments". That was why I had a duplicate class to do the parsing internally.
+
+Still, it was inconvenient and the code was soaked. I played around a bit with the library parsing method, and I found out that I could just attach the parsed result to an instance of class `Options` itself. Therefore, I made a static method that acted like a constructor. 
+
+Fortunately, the two duplicate classes have the same properties, so I just need to rename `Options` to `ArgsParser` and replace `ArgsParser` constructor with the static method.
+
+### refactor: extract to IndexFile from Generator
+
+I noticed that my `Generator` class was quite large. I started looking for methods that didn't depend much on the state of class `Generator`, and I found the two methods for generating the index file. They only needed to know where the source of files was.
+
+So, I extracted the logic into a new class `IndexFile`, whose constructor received a path to files needed indexing. After that, just pass the path to dist directory to `IndexFile` from `Generator`.
+
+### refactor: rename ArgsParser to CliArgs
+
+Naming things is hard, especially when the responsibilities of them change over commits. Initially, I named it `ArgsParser` because it was meant to be a collection of static methods that dealt with parsing CLI arguments (that was before I reached out to a third-party library). Now, it's just an storage for parsed CLI arguments; hence, the renaming.
+
+
+## Rebase
+
+`git rebase` and `git --amend` are really convenient for patching up commits. I still remember the horror when I mispelled a commit message, and I had to live with it forever. Grouping commits is a neat feature of `git rebase` too, my git history looks cleaner and the top-level messages are more relevant.
+
+## Additional links
+- My project: [paper-csharp](https://github.com/Andrewnt219/paper-csharp)
+
+- The refactor commit: [9c07965](https://github.com/Andrewnt219/paper-csharp/commit/9c07965f64929e9def82f14d1a6ecc9ea41671c4?branch=9c07965f64929e9def82f14d1a6ecc9ea41671c4&diff=unified)
+
+
+
