@@ -47,7 +47,7 @@ function addFeedItem(postMatter: PostMatter) {
 
     content: renderToStaticMarkup(
       <MDXRemote {...postMatter.content} components={MdxComponents} />
-    ),
+    ).replace(/src="\//g, `src="${BASE_URL}/`),
     author: [author],
     contributor: [author],
     date: new Date(postMatter.publishedOn),
