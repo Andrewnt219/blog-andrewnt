@@ -1,0 +1,36 @@
+---
+title: '[transitive-bullshit/nextjs-notion-starter-kit] Fix embedded video overflows'
+description: Add a new feature in an unfamiliar codebase
+thumbnail:
+  author: Nadir sYzYgY
+  authorLink: https://unsplash.com/@nadir_syzygy?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/transitive-bullshitnextjs-notion-starter-kit-fix-embedded-video-overflows/hero.jpg
+isArchived: false
+publishedOn: 2021-10-23T01:00:00-0400
+tags:
+  - css
+  - open-source
+  - hacktoberfest
+---  
+
+## Table of Contents
+
+## Context
+
+Repo [nextjs-notion-starter-kit](https://github.com/transitive-bullshit/nextjs-notion-starter-kit). This is a template for connecting Notion and Next.js. Such a wonderful combination of Notion's unmatched editor experience and Next.js's highly optimized performance.
+
+Issue [#162](https://github.com/transitive-bullshit/nextjs-notion-starter-kit/issues/162). During my personal usage, I noticed that embedded videos overflowed their text container.
+
+PR [#175](https://github.com/transitive-bullshit/nextjs-notion-starter-kit/pull/175)
+
+## Solving the issue
+
+It was a CSS problem, so I played around with the rules until it was fixed. My hunch was the width of those videos weren't specified, so they just went with their intrinsic dimensions.
+
+I was a bit concerned because the project didn't scope any CSS, so I had to make the additional rule as specific as possible, avoided breaking any other rules. I tested quite a few scenarios, and it was perfect on desktop or mobile.
+
+## Ending note
+
+My favorite point of this PR was that I fixed it on my forked repo, and I thought others would benefit from the fix as well. That was the foundation of open source.
