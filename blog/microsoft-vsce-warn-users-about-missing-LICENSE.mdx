@@ -1,0 +1,42 @@
+---
+title: '[microsoft/vsce] Warn users about missing LICENSE #603'
+description: Add a new feature in an unfamiliar codebase
+thumbnail:
+  author: Bench Accounting
+  authorLink: https://unsplash.com/@benchaccounting?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1630
+  url: /images/microsoft-vsce-warn-users-about-missing-LICENSE/hero.jpg
+isArchived: false
+publishedOn: 2021-10-23T01:00:00-0400
+tags:
+  - typescript
+  - open-source
+  - hacktoberfest
+---
+  
+## Table of Contents
+
+## Context
+
+Repo [microsoft/vscode-vsce](https://github.com/microsoft/vscode-vsce). *vsce aka Visual Studio Code Extension Manager* is a command-line tool for packaging and publishing all the extensions used in [Visual Studio Code](https://code.visualstudio.com/). 
+
+Issue [#603](https://github.com/microsoft/vscode-vsce/issues/603). A user requested to add a warning line about missing LICENSE file when publishing through vsce.
+
+PR [#628](https://github.com/microsoft/vscode-vsce/pull/628)
+
+## Solving the issue
+
+Initially, the dev instructions in `[README.md](http://README.md)` were not up-to-date, so I couldn't set up the project. Therefore, I asked the [João](https://github.com/joaomoreno) (one of the maintainer) about it and he had the steps updated.
+
+The codebase was undoubtedly large. To save time for both the reviewer and I, I asked for a hint where I should start. Thanks to João's advice, my scope was down to one class. Most stuffs were stored as class' properties, so I found it a bit difficult to keep track of where they were changed. 
+
+The most eye opening lesson was debugging the codebase. Since vsce only worked with extensions, I had to go take a "crash course" on [building a hello-world extension](https://code.visualstudio.com/api/get-started/your-first-extension). 
+
+I had a test subject, but I realized I didn't know how I could run my local vsce with the new changes on this hello-world extension. After doing some googling, `npm` had a really nice feature for the case, which was [npm-link](https://docs.npmjs.com/cli/v7/commands/npm-link). Ironically, the next morning, I forgot one step in the development process, which resulted in spending the next hour deleting and reinstalling the codebase as my changes were not reflected (I meant, it was working just before I went to sleep).
+
+The PR went back and forth with a few more changes. I was confused as one point why changing the content of a warning message break the test. Turned out the regex had the string embedded.
+
+## Ending note
+
+The thought of having my code run on every published extensions excites me. I've learnt a lot about creating an extension in VSCode, and I have to admit it was an interesting area of development I'd have missed without this PR. Literally went through the whole cycle of developing to publishing a package just to test my feature.
