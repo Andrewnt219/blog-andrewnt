@@ -1,0 +1,45 @@
+---
+title: '[vscode-jupyter] Fix `#%%` is not recognized as cell'
+description: Add a new feature in an unfamiliar codebase
+thumbnail:
+  author: Isaac Smith
+  authorLink: https://unsplash.com/@isaacmsmith?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/vscode-jupyter-fix-cell-matcher/hero.jpg
+isArchived: false
+publishedOn: 2021-10-23T01:00:00-0400
+tags:  
+  - open-source
+  - hacktoberfest
+---
+  
+## Table of Contents
+
+## Context
+
+Repo [microsoft/vscode-jupyter](https://github.com/microsoft/vscode-jupyter). Jupyter is a notebook that allows writing markdown and executable Python source code in one file.
+
+Issue [#7829](https://github.com/microsoft/vscode-jupyter/issues/7829). The extension was expected to recognized `#%%` as a starting point for a new cell, but it didn't.
+
+PR [#7995](https://github.com/microsoft/vscode-jupyter/pull/7955)
+
+## Solving the issue
+
+I spent so much time trying to set up this project, mainly because I had never worked with Python before. My dev environment required a lot of installation for python ecosystem, and I ran into a few unfamiliar errors during the setup.
+
+The errors looked simple at first, just a wrong regex as [Rich](https://github.com/rchiodo), the maintainer, said. No matter how I changed the regex, still nothing changed at all. Luckily, I could trace the bug using breakpoints. Eventually, I came up with a fix, but it was much different from the initial discussion so I put a summary of my findings and let Rich help me decide on the solution.
+
+<Image
+  src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F21383c1c-a718-4223-b5b9-39e342051154%2FUntitled.png?table=block&id=c00fe82b-7540-4502-b5e7-f46a9f78ce13&cache=v2"
+  width={846}
+  height={613}
+  alt="folder structure of the experiment"
+/>
+
+<Image
+  src="https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F69dd1a6c-d551-43c1-b821-7bc78eaac2b0%2FUntitled.png?table=block&id=3781ba6b-a087-4761-970f-a30e140ac85e&cache=v2"
+  width={851}
+  height={785}
+  alt="folder structure of the experiment"
+/>
