@@ -1,0 +1,45 @@
+---
+title: '[telescope] Show repos, issues, pull requests mentioned in posts'
+description: Fourth contribution to hacktoberfest
+thumbnail:
+  author: Matthew Ansley
+  authorLink: https://unsplash.com/@ansleycreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/telescope-show-repos-issues-pull-requests-mentioned-in-posts/hero.jpg
+isArchived: false
+publishedOn: 2021-10-26T00:00:00-0400
+tags:
+  - open-source
+  - hacktoberfest
+---
+
+## Table of Contents  
+
+
+## Context
+
+Repo [Seneca-CDOT/telescope](https://github.com/Seneca-CDOT/telescope). Telescope is an aggregator fetching blog posts from Seneca open-source members.
+
+Issue [#2360](https://github.com/Seneca-CDOT/telescope/issues/2360), [#2361](https://github.com/Seneca-CDOT/telescope/issues/2361). I worked on collecting GitHub links from each posts, extracting information from those links, and filtering them by their type (repo, issues, pull requests, commits).
+
+PR [#2367](https://github.com/Seneca-CDOT/telescope/pull/2367), [#2363](https://github.com/Seneca-CDOT/telescope/pull/2363)
+
+## Solving the issue
+
+The issue started out pretty easy and straight forward. As it was tested with live data, more and more edge cases were discovered and the mine initial regex for extracting information from GitHub URLs kept growing and growing. This isn't even its final form.
+
+```ts
+// Match urls that start with /<user>/<repo>, and optionally end with /<anything-in-between>/<type>/<id>
+// Ex: /Seneca-CDOT/telescope/pull/2367 ✅
+// Ex: /Seneca-CDOT/telescope ✅
+// Ex: /Seneca-CDOT/telescope/pull/2367/commits/d3fag ✅
+// Ex: /Seneca-CDOT/telescope/issues ✅
+const matches = /^\/(?<user>[^\/]+)\/(?<repo>[^\/]+)((\/(.*))?\/(?<type>[^\/]+)\/(?<id>(\d+))\/?$)?/i.exec(
+  pathname
+);
+```
+
+Because this was a brand new feature, I went through a lot of feedback loops to fix bugs and enhancement. That was also my first time sending a PR to another PR (i.e. co-authoring a PR). Because of the co-authoring, there were a few misunderstandings that led to regression, but eventually everything worked out. 
+
+It felt so great when the feature went live on dev server. Scrolling through posts and seeing all the info extracted and displayed without any problems was so satisfying.
