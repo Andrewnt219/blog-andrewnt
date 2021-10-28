@@ -1,0 +1,59 @@
+---
+title: '[OSD600 Series] Lab 06 - Adding static files to SSG'
+description: Deploying docusaurus and adding static images to ssg
+thumbnail:
+  author: Alexander Dummer
+  authorLink: https://unsplash.com/@4dgraphic?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1349
+  url: /images/osd-600-lab-6/hero.jpg
+isArchived: false
+publishedOn: 2021-10-28T01:00:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Docusaurus
+
+Docusaurus out-of-the-box blogs and docs are simply amazing. Markdown supports MDX with elegant built-in components for common cases like [Tabs](https://docusaurus.io/docs/markdown-features/tabs), [Admonitions](https://docusaurus.io/docs/markdown-features/admonitions), etc. It is also highly customizable via `docusaurus.config.js`.
+
+Setting up a Docusaurus is as fast as running one script. Everything is ready to deploy, just need to replace some name and links.
+
+```bash
+npm init docusaurus@latest my-website classic
+```
+
+Docusaurus also has an [exhaustive guide for deployment](https://docusaurus.io/docs/deployment). However, resolving static assets was a bit tricky. Static assets were automatically rewrited correctly in markdown files. In JSX, with the sample template homepage, the [documentation](https://docusaurus.io/docs/static-assets) said there were three ways to import assets, but the only usable option is `useBaseUrl`. The `require` and `import` only work with images, not svgs.
+
+
+
+## Add static images to paper
+
+As I was struggling a bit with Docusaurus static assets, I decided to give it a try.
+
+It was pretty straightforward from what I had imagined.
+
+1. Parse the markdown syntax into tag `img`.
+
+2. Copy everything in static directory to `dist` folder.
+
+3. Point sources in markdown files to the `static` folder now inside the `dist` folder.
+
+The first and second steps are pure coding so it wasn't complicated. The last step was quite confusing. At first, I had planned to work with relative path: going backwards from files until reach the root of `dist` folder, then go into /static. That was obviously not simple, as files could be nested multi-level down. So, I decided to give absolute path a try, and it just magically resolved on vercel (not working locally) by using `href="/static/1.jpg"`.
+
+At the moment, the project only supports images. Moving forward, it should read assets extensions and generates approriate html tags. I'm also finding a way to test this feature locally.
+
+## Additional Resources
+
+- Feature demo: [https://paper-csharp.vercel.app/sample/markdown/Gallery.html](https://paper-csharp.vercel.app/sample/markdown/Gallery.html)
+
+- Docusaurus demo: [https://andrewnt219.github.io/my-website/](https://andrewnt219.github.io/my-website/)
+
+- Commit: [99ad7302](https://github.com/Andrewnt219/paper-csharp/commit/99ad73026c60f23cd566f45f1ecdd5befbf398e0)
+
+- Issue: [https://github.com/Andrewnt219/paper-csharp/issues/7](https://github.com/Andrewnt219/paper-csharp/issues/7)
+
+- PR: [https://github.com/Andrewnt219/paper-csharp/pull/8](https://github.com/Andrewnt219/paper-csharp/pull/8)
