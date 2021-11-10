@@ -1,0 +1,113 @@
+---
+title: '[OSD600 Series] Lab 08 -  Automated Testing for SSG'
+description: Testing SSG with MS Tests  
+thumbnail:
+  author: Hans Reniers
+  authorLink: https://unsplash.com/@hansreniers?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-lab-8/hero.jpg
+isArchived: false
+publishedOn: 2021-11-10T17:35:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Setup MS Test
+
+According to [.NET documentation for testing](https://docs.microsoft.com/en-us/dotnet/core/testing/), there are three most popular .NET testing frameworks: xUnit, NUnit and MSTest. I don't have much knowledge about any of these, but I chose MSTest because it is _the_ "Microsoft test framework". I hoped it would ease the setup and integrate smoothly with my current project.
+
+That's to say, still quite a lots of reorganized stuffs I had to do. First of all, I then needed to put my test code and my main code into separate project packages (i.e. two different .csproj). Was quite the hassle as I remembered a bunch of my build scripts (and even logic) depended on the project root folder. To minimize the pain, I moved the whole current project into a folder, and gradually moved unnecessary files outside while running the build script at each step to make sure everything was still working.
+
+After that, I followed the [documation](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest) for setting up.
+
+1. Add a new soluntion at the root of the project (if you haven't done so)
+```bash
+dotnet new sln
+```
+
+2. Add _MainProject_ to solution
+```bash
+dotnet sln add ./path/to/MainProject/your-project.csproj
+```
+
+3. Initialize a new MSTest project named _TestProject_
+```bash
+dotnet new mstest -o TestProject
+```
+
+4. Add a reference from _TestProject_ to _MainProject_
+```bash
+cd TestProject
+dotnet add reference ../MainProject/your-project.csproj 
+```
+
+5. Add _TestProject_ to solution
+```bash
+dotnet sln add ./path/to/TestProject/your-project.csproj
+```
+
+6. Run test
+```bash
+# Build MainProject and run tests in TestProject
+dotnet test
+
+# Only run tests in TestProject
+dotnet test TestProject
+```
+
+## Writing test cases
+
+This was the lab that got me thinking "Huh, I'd happily get that 4% deduction". 
+
+Initially, I tried to mimick the manual build steps for testing, which involves reading files from current working directory. For hours, I searched for a way to copy files into the test run environment. Embedding resources, DeloymentItem, etc. none worked for me.
+
+I was ready to gave in, but then I realized I didn't need to read text from the current working directory, I could just created a new file on the fly, and read directly from that file. 
+
+```csharp
+  this.txtFilePath = Path.GetRandomFileName() + ".txt";
+  using (System.IO.FileStream fs = System.IO.File.Create(this.txtFilePath))
+  {
+    fs.Write(Encoding.ASCII.GetBytes("Title\n\n\nHello World"));
+  }
+
+  this.mdFilePath = Path.GetRandomFileName() + ".md";
+  using (System.IO.FileStream fs = System.IO.File.Create(this.mdFilePath))
+  {
+    fs.Write(Encoding.ASCII.GetBytes("#Title\nHello World"));
+  }
+```
+
+After that, just need to pass those paths to the generator
+
+```csharp
+  [TestMethod]
+  public void RunWithMultipleFiles()
+  {
+    string[] args = { "-i", this.txtFilePath, this.mdFilePath, "-o", this.distPath, "-s", this.styleSheetUrl };
+    var generator = new Generator(args);
+    generator.Run();
+
+    Assert.IsTrue(Directory.Exists(this.distPath));
+    Assert.IsTrue(File.Exists(this.txtFileDistPath));
+    Assert.IsTrue(File.Exists(this.mdFileDistPath));
+  }
+```
+
+## Ending note
+
+Admittedly, it was not as fun and easy as testing websites (cypress), but it was a rewarding experience regardless. I did have to do some small tweaks to make the code testable. 
+
+I feel like architecting tests is also a piece of art. It takes great efforts to write tests that are loose enough not to break on every deployment, but strict enough to give confidence to developers.  
+
+
+## Additional Resources
+
+- [Commit `706edbc1`](https://github.com/Andrewnt219/paper-csharp/commit/706edbc10a7952b1a277498c0690e5e39c71e2ca)
+
+- [Unit testing C# with MSTest and .NET](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest)
+
+- [The Microsoft testing framework - MSTest](https://github.com/Microsoft/testfx-docs)
