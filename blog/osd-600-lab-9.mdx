@@ -1,0 +1,80 @@
+---
+title: '[OSD600 Series] Lab 09 -  Continuous Integration'
+description: Adding CI/CD workflows  
+thumbnail:
+  author: Lenny Kuhne
+  authorLink: https://unsplash.com/@lennykuhne?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-lab-9/hero.jpg
+isArchived: false
+publishedOn: 2021-11-19T00:55:00-0400
+tags:
+  - open-source
+  - osd600
+  - ci
+---
+
+## Table of Contents
+
+## Setup github actions
+
+To setup github actions, just add YAML files inside .github/workflows directory at the root of your project. Here is a little summary of keys defined in a workflow
+
+```yml
+# .github/workflows/main.yml
+
+# Workflow to build the project, format the code and run tests
+
+# Title of the workflow
+name: dotnet package
+
+# Trigger this workflow on push
+on: [push]
+
+# jobs to run inside this workflows
+jobs:
+  # job's title
+  build:
+    # Choose a platform to run on
+    runs-on: ubuntu-latest
+    # options
+    strategy:
+      matrix:
+        dotnet-version: ['5.0.x']
+    # steps to do this job
+    steps:
+      # use a preset steps to checkout the code 
+      - uses: actions/checkout@v2
+      # define a custom step
+      # step title
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        # use a preset step to setup .NET environment
+        uses: actions/setup-dotnet@v1.7.2
+        # preset options
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        # command to run
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+```
+
+## Add tests to a OSD_SSG
+
+I looked through [OSD_SSG](https://github.com/DukeManh/OSD_SSG) tests. The project was well tested and had a clear structure. I filed an issue to add some tests for a single file as input, as this used to cause my program to crash.
+
+Thanks to the [CONTRIBUTING.md](https://github.com/DukeManh/OSD_SSG/blob/main/CONTRIBUTING.MD), setting up the project was a breeze. The real problem was the OS different during test run. Because the tests relied heavily on snapshot testings, the different path separator between Window and MacOS caused some tests to fail. I had to use Window Subsystem for Linux to ensure there were no false negative. I also encountered a problem with escaping filenames with spaces. I reported my findings in [the PR](https://github.com/DukeManh/OSD_SSG/pull/17) and got help.
+
+
+## Ending note
+Who else get a little dopamine boost everything those green checks popup? I had some cypress tests on other projects, but never had the time to figure out how to set them up on github actions. After learning the meaning of these YAML workflows, it's clearer what to do. For those that are interested, you can start a dev server in Github Actions for your frontend framework, and run your cypress on the dev server instead of your staging/production website. This [npm package](https://github.com/bahmutov/start-server-and-test) help start and stop the server automatically. Works great with [cypress preset](https://github.com/cypress-io/github-action).
+
+## Additional Resources
+
+- [Commit `95b29be`](https://github.com/Andrewnt219/paper-csharp/commit/95b29bec6888016e527bb9c61d84b708117e9ad4)
+
+- [Pull Request OSD_SGG](https://github.com/DukeManh/OSD_SSG/pull/17)
