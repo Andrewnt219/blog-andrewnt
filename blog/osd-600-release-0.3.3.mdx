@@ -1,0 +1,42 @@
+---
+title: '[OSD600 Series] Release 0.3.3 - Doing code reviews'
+description:  'The good, the bad, the ugly' 
+thumbnail:
+  author: Towfiqu barbhuiya
+  authorLink: https://unsplash.com/@towfiqu999999?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1601
+  url: /images/osd-600-release-0.3.3/hero.jpg
+isArchived: false
+publishedOn: 2021-11-19T00:55:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Context
+
+[Francesco Menghi](https://github.com/menghif) laid the first UI block for the new status dashboard, showing various Github metrics. 
+
+[nguyenhung15913](https://github.com/Seneca-CDOT/telescope/pull/2476) added another metric card to show the number of posts in Telescope.
+
+## The reviews
+
+### [Add GitHub stats to the status dashboard](https://github.com/Seneca-CDOT/telescope/pull/2466)
+
+<Image width={1919} height={931} src="/images/osd-600-release-0.3.3/ss1.png" />
+
+The changes is live on [staging server](https://dev.api.telescope.cdot.systems/v1/status) 🎉.
+
+Francesco did a great job on the core javascript logic. All the data were fetched and added to the DOM. Reviewing his changes, I saw a potential improvement in the CSS of the card. The card initially was uneven, their height varies on the content of the card. I locally checked out his PR, play around with one card and came back with some suggestions.
+
+Francesco applied the CSS changes from the default assets of Material Dashboard 2. After a few discussions, we reached the final structure with [BEM convention](http://getbem.com/introduction/) and a separate css sheet outside, keeping the default assets intact.
+
+### [Adding posts count to dashboard](https://github.com/Seneca-CDOT/telescope/pull/2476)
+
+After jumping in and out a few PRs discussions for the dashboard, I understood how the routing and backend data fetching worked. We also started to have project hierarchy in place for javascript and css files, so I suggested applying those changes into the current PR. It was a bit hard as the branch usually had not picked up the changes from master which actually was continuosly updated with new PRs this week. 
+
+At the time of writing, the PR was almost ready to merge. There were still some hick-ups around rebasing, hope to see it went live soon.
+
