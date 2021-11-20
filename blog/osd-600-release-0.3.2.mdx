@@ -1,0 +1,36 @@
+---
+title: '[OSD600 Series] Release 0.3.2 - Contribute to Telescope status dashboard'
+description:  'Open source at Seneca College' 
+thumbnail:
+  author: Stephen Dawson
+  authorLink: https://unsplash.com/@dawson2406?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1727
+  url: /images/osd-600-release-0.3.2/hero.jpg
+isArchived: false
+publishedOn: 2021-11-19T00:55:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Context
+
+In [Add live build logs in status dashboard](https://github.com/Seneca-CDOT/telescope/issues/2415), it was a nice enhancement to show everyone the build status, as only the owner can access build status from deployment sites. Using an existing React app I port the logic to vanilla JavaScript.
+
+Patched in [Fix #2415: add live build logs in status dashboard](https://github.com/Seneca-CDOT/telescope/pull/2455), a barebone implementation from the React app was added.
+
+## Solving the issue
+
+To be honest, I delayed much on the issue because of the dev setup and fetching logic. Having worked only on the frontend of Telescope, I had zero ideas how to get the data from backend. The routing for backend from status page at that time still had a lot of issues. It's great to see now all of them are sorted out, and the dev setup works out-of-the-box (props to [sirinoks](https://github.com/Seneca-CDOT/telescope/pull/2494)).
+
+With that state of the app, I just tried to port the logic from the existing React app. It was not to difficult, it was just more verbose.
+
+I had been in Reactland for so long that working in vanilla JavaScript, without npm install, was a bit confusing. Luckily, I can still modulized files with [JavaScript Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), which was a part of the native web and didn't need any bundlers (e.g. webpack) setup.
+
+There were no access to `node_modules` so all the libraries are delivered using a CDN. Calling libraries from global namespace is a bit magical, and slightly agitating. Scripts also needed to be imported in the correct order inside html. Querying for element was such a nostalgia from the early days of learning webs. 
+
+All in all, it was a fun ride back to Just JavaScript™️. Undoubtedly, the language itself has drastically improved over the short 2 years since I first learned web.
+
