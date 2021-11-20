@@ -1,0 +1,45 @@
+---
+title: '[OSD600 Series] Release 0.3.1 - Contribute to react-query'
+description:  'Accessibility matters' 
+thumbnail:
+  author: Anthony Duran
+  authorLink: https://unsplash.com/@fightmorefilms?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1713
+  url: /images/osd-600-release-0.3.1/hero.jpg
+isArchived: false
+publishedOn: 2021-11-19T00:55:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Context
+
+*[react-query](https://github.com/tannerlinsley/react-query)* is my most favorite react library for data fetching. It has built-in data revalidating, client-side caching, etc. A great and no-frills alternative to global state and [ducks pattern](https://redux.js.org/style-guide/style-guide) of [Redux](https://redux.js.org/).
+
+In [#2901 - Improve aria-tagging of Devtools](https://github.com/tannerlinsley/react-query/issues/2901), an accessibility concern was risen about the react-query devtools. For screen reader, that was a major issues to navigate the devtools.
+
+Patched in [#2947 - Fix/2901 improve devtools a11y](https://github.com/tannerlinsley/react-query/pull/2947), all accessibility concerns were resolved and tested.
+
+## Solving the issue
+
+### [fix(devtools): improve devtools container a11y](https://github.com/tannerlinsley/react-query/pull/2947/commits/c97f1841ba0e350b46d31ce8b2a601c2bfc0c51c)
+
+To my surprise, the core of devtools is a file with **877 lines of code**. Needless to say, there's no way I can read all the logic inside. I just searched for the word "footer", changed it to aside, updated the documentation and any other related usage.
+
+### [fix(devtools): add aria to devtools toggle button](https://github.com/tannerlinsley/react-query/pull/2947/commits/43093bfef1dd5f0ac39858d9edc06e3a8def724a)
+
+This one required some research. Following the guidelines of WCAG on [menu buttons](https://www.w3.org/TR/wai-aria-practices/examples/menu-button/menu-button-links.html), I added all the necessary aria. To make sure it worked as expected, I used [NV Access](https://www.nvaccess.org/), a screen reader for Window OS, to read the content. What the screen reader announced totally made sense to the state of button. It was something like this "React Query Devtools, button, collapse".
+
+### [fix(devtools): menuitem are visible in a11y tree in closed devtools](https://github.com/tannerlinsley/react-query/pull/2947/commits/672aee55800258c7334e980d7bee0ba6d0fbfabd)
+
+To debug this, I used the sample from WCAG [menu buttons](https://www.w3.org/TR/wai-aria-practices/examples/menu-button/menu-button-links.html), and figured out menuitem is removed from the a11y tree when the parent is hidden (`display: none`). 
+
+It was not a straightforward fix in the code. I thought I could just set the root container to `display:none`, but soon realized they didn't set it in the first place because of the animation. From there, I went down the component tree to find a suitable place to add the change. There were so many things happen in the code that I don't know if my change would break something. Luckily, react-query had a throughout test system that let my mind at ease.
+
+## Ending note
+
+Apart from the new experience with web accessibility, I learned how [Tanner Linsley](https://github.com/tannerlinsley) - the mastermind behind the tanstack - manage to work on so many awesome open source projects at the same time. It was a nice experience working on these repos: the dev setup for react-query was a breeze, clear contributing guidelines and commit standards, throughout testings.
