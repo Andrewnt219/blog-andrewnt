@@ -1,0 +1,161 @@
+---
+title: '[OSD600 Series] Lab 10 -  Release v1.0.0'
+description: Publish to Nuget and cross-platform binary
+thumbnail:
+  author: Claudio Schwarz
+  authorLink: https://unsplash.com/@purzlbaum?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-lab-10/hero.jpg
+isArchived: false
+publishedOn: 2021-11-23T23:55:00-0400
+tags:
+  - open-source
+  - osd600
+  - ci
+---
+
+## Table of Contents
+
+## Publish on Nuget.org
+The general idea is to create a nuget file `.nupkg` and push that file onto [https://www.nuget.org/](https://www.nuget.org/). All the info about the package is defined inside `.csproj`.
+
+
+```xml
+<!-- Unique id for the package -->
+<PackageId>andrewnt219.paper</PackageId>
+<!-- Version of the package -->
+<Version>1.0.0</Version>
+<!-- Author of the package -->
+<Authors>Andrew Nguyen</Authors>
+<!-- Description of the package on nuget -->
+<Description>Static site generator (SSG) made with .NET</Description>
+<!-- Url to the source code -->
+<RepositoryUrl>https://github.com/Andrewnt219/paper-csharp</RepositoryUrl>
+<!-- create .nupkg on build -->
+<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+```
+
+```bash
+## Pack the package to .nupkg
+dotnet pack
+
+## Publish the package to nuget
+cd ./Path/to/folder/with/YourApp.1.0.0.nukpg
+
+dotnet nuget push YourApp.1.0.0.nupkg --api-key YOUR-NUGET-API-KEY --source https://api.nuget.org/v3/index.json
+```
+
+After everything is done, your package is under "Unlisted packages" inside your dashboard on [https://www.nuget.org/](https://www.nuget.org/)
+
+Read more: [https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli](https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli)
+
+
+## Publish as a console app
+The general idea is compile your library into multiple binary files for different OS.
+
+```bash
+dotnet publish path/to/your/csproj -c Release -a <ARCHITECTURE> -f <.NET VERSION>  --self-contained true
+```
+Summary of used options:
+- `-a <ARCHITECTURE>` is the target OS. E.g: `-a osx-x64`
+- `-f <.NET VERSION>` is the target framework. E.g. `-f net5.0`
+- `--self-contained [true|false]` 
+  - true is includes the .NET run time in build (larger app size)
+  - false is exclude .NET run time from build (smaller app size, users have to download the .NET run time themselves) 
+
+Executable binary files:
+- For all platforms: `dotnet YourProgram.dll --help`
+- For Window users: `./YourProgram.exe --help`
+- For Mac/Linux users
+
+```bash
+chmod 777 YourProgram
+
+YourProgram --help
+```
+
+After all, you can attach these binary files with a Github release. 
+
+Read more: [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish)
+
+## Publish as a dotnet tool
+
+Aside from the usual package info like publishing a nuget, an additional two lines are needed
+```xml
+<!-- Specify type of this package -->
+<PackageType>DotnetCliTool</PackageType>
+<!-- Name has to prefix with "dotnet-"" -->
+<AssemblyName>dotnet-your-app</AssemblyName>
+```
+
+After that, users can run
+```bash
+# Install the package
+dotnet tool install your-app-id
+
+# Run the package
+dotnet tool your-app
+```
+
+The only drawbacks is this type of package can only target .NET Core v2.2 and lower.
+
+Read more: [https://blog.maartenballiauw.be/post/2017/04/10/extending-dotnet-cli-with-custom-tools.html](https://blog.maartenballiauw.be/post/2017/04/10/extending-dotnet-cli-with-custom-tools.html)
+
+## Users' feedbacks 
+
+As the compiled .NET program are really simple to use, just download the file and run the file in a console, both of my friends on Window and Linux had no problem transforming their text files into html. Only on Mac, Apple was strict on potential virus file so my binary was discarded.
+
+I also publish the program on nuget. In order to run this, you need to set up a .NET console app and import the `Generator` from the package. No setup needed, `Generator` works out-of-the-box. Just pass it the args from the console.
+
+## Publish nuget with Github Actions
+```yml
+name: publish to nuget
+# Only run this on master
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['5.0.x']
+
+    steps:
+        # Checkout code
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+        # Build the project
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        # Make sure tests pass
+        run: dotnet test --no-restore --verbosity normal
+        # Publish the package to nuget
+      - name: Publish NuGet
+        uses: brandedoutcast/publish-nuget@v2.5.5
+        with:
+          # Path to the program '.csproj'
+          PROJECT_FILE_PATH: Generator/Generator.csproj
+          # The unique id of the package on nuget
+          PACKAGE_NAME: andrewnt219.paper
+          # The regex to extract the version from '.csproj'
+          # This regex is for <Version>v1.0.0</Version>
+          VERSION_REGEX: ^\s*<Version>(.*)<\/Version>\s*$
+          # Your nuget API key
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+```
+
+## Additional Resources
+
+- [Commit `9df9695`](https://github.com/Andrewnt219/paper-csharp/commit/9df969511b04350b9e12d17a8583a8385d1ca6a9)
+
+- [Nuget package](https://www.nuget.org/packages/andrewnt219.paper/)
