@@ -1,0 +1,69 @@
+---
+title: '[OSD600 Series] Release 0.4.1 - Planning'
+description:  'Area of interests' 
+thumbnail:
+  author: Alvaro Reyes 
+  authorLink: https://unsplash.com/@alvarordesign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-release-0.4.1/hero.jpg
+isArchived: false
+publishedOn: 2021-11-28T10:40:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Goals
+In 0.4, I'm planning to contribute more to libraries/frameworks that are closed to me. 
+
+- Enhance Telescope: With the recent setup of the [dashboard](https://dev.api.telescope.cdot.systems/v1/status/), there are a lots of exciting features await! 
+
+- Solve an issue in the React ecosystem: I am specially aiming at components libraries. I have always been fascinated by the flexibility and resusability of these architectures.
+
+- Solve an issue in [microsoft/TypeScript](https://github.com/microsoft/TypeScript): TypeScript is the reason I love web development so much. It preserves the dynamic nature of JavaScript, and agreesively yell at you at the same time. Truly the smartest compiler I have ever used. 
+
+
+## Progress 0.4.1
+
+### Motivation
+
+To kick off the final release, I added [scss compiler to the dashboard](https://github.com/Seneca-CDOT/telescope/pull/2522). The motivation: I noticed in previous PRs, we had to used long and specific CSS selector to overide the default style
+
+```css
+#sidenav-collapse-main > ul > li > a.active {
+  background-color: #121d59;
+}
+
+#sidenav-collapse-main > ul > li > a {
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+  font-size: 1em;
+}
+
+#sidenav-collapse-main.collapse.navbar-collapse.w-auto.max-height-vh-100 {
+  height: calc(100vh);
+}
+```
+
+These are unintuitive to read and prone to errors. If we can overide from the source, we don't have to write these hacks and duplicate them everywhere. However, the source of [Material Dashboard 2](https://www.creative-tim.com/product/material-dashboard) is written [SCSS](https://sass-lang.com/documentation/syntax), so a compiler is needed to transform SCSS to normal CSS.
+
+
+### Execution
+
+To make it easy, I brought the whole build step from Material Dashboard 2 to Telescope. To my surprise, it did't compile. The terminal showed a bunch of vague errors. The command causing the crash was actually a chain of other commands. I tried to isolate the problem by running each command individually, and got rid of unused commands (for Telescope purpose) along the way. It narrowed down to the library `gulp-sass`. 
+
+Did a bit of research and I found out `gulp-sass@^4` used `node-sass@^4` under the hood, and `node-sass@^4` was compatible with `node@14` only (see [this table](https://www.npmjs.com/package/node-sass)). Luckily, `gulp-sass@^5` allowed using either `sass` or `node-sass`, and unlike `node-sass`, `sass` didn't depend on `node` version. However, Material Dashboard 2 used a lot of deprecated api, so migrating to SASS in the same PR maybe a bit too much work for reviewers.
+
+That is to say, after the dicussion, it was concluded that having a restricted `node` version was much more of a hassle for deployment config than migrating to `sass`, so I had to do the migration eventually. I started off with a few lines, then I thought if the `sass` compiler could recommend a fix that specific to replace the deprecated api, someone could write a script to automate this. In fact, `sass` itself did have a [migrator](https://sass-lang.com/documentation/cli/migrator). I just needed to learn the syntax and double-check on the changes. What a time saver.
+
+There were a few more changes requests for the deployment setup, eventually `gulp` was removed from the build step, only `sass` stayed.
+
+## Additional resources
+
+- [PR #2522: Add SCSS compile step to dashboard](https://github.com/Seneca-CDOT/telescope/pull/2522)
+
+- [Issue #2489: Add SCSS compiler step to status dashboard](https://github.com/Seneca-CDOT/telescope/issues/2489)
+
