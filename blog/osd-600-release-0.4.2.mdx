@@ -1,0 +1,125 @@
+---
+title: '[OSD600 Series] Release 0.4.2 - Contributing to useSWR'
+description:  '' 
+thumbnail:
+  author: Alvaro Reyes 
+  authorLink: https://unsplash.com/@alvarordesign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1578
+  url: /images/osd-600-release-0.4.2/hero.jpg
+isArchived: false
+publishedOn: 2021-12-03T10:40:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Goals
+Check in week 2:
+- Contribute to Telescope ✅
+- Contribute to a React library ✅
+- Contribute to TypeScript ❌
+
+## Context
+[vercel/swr](https://github.com/vercel/swr) is a React hook that is primarily used for fetching data. It has a lot of great built-in optimizations like client-side caching, revalidating on focus, etc.
+
+[Issue vercel/swr#1683](https://github.com/vercel/swr/issues/1683) requests to add support for passing a function to `refreshInterval`, similar to [react-query `refetchInterval`](https://react-query.tanstack.com/reference/useQuery).
+
+[PR vercel/swr#1690](https://github.com/vercel/swr/pull/1690) addresses the issue, adds tests for the new feature.
+
+[PR vercel/swr#1691](https://github.com/vercel/swr/pull/1691) is a follow up, add another test when function returns 0 (should disable the option).
+
+[PR vercel/swr-site#190](https://github.com/vercel/swr-site/pull/190) is a follow up, update the documentation on [swr website](https://swr.vercel.app/)
+
+## Execution
+
+`swr` dev setup is super straight forward. They even have a script to link the swr library to the local development instead of downloading from npm registry (this can also be done using [npm link](https://docs.npmjs.com/cli/v8/commands/npm-link/)). Tons of exmaples to use for testing as well.
+
+Because it is written in TypeScript, I started with updating the type
+
+```ts
+// old
+refreshInterval?: number
+
+// new
+refreshInterval?: number | ((latestData: Data | undefined) => number)
+```
+
+I could have started with the code next, but I took a bit different approach. I decided to go with [Test-driven Development](https://en.wikipedia.org/wiki/Test-driven_development) or TTD for short. It was really helpful, I could imagine how the expected result should be before writing code. 
+
+I started testing by looking for any similar tests that I could copy the structure from. The first test was to check if the function behave the same way as just returning a number. I kept it simple to make debugging easier, just a function directly returned a number.
+
+```tsx{7}
+  it('should allow using function as an interval', async () => {
+    let count = 0
+
+    const key = createKey()
+    function Page() {
+      const { data } = useSWR(key, () => count++, {
+        refreshInterval: () => 200,
+        dedupingInterval: 100
+      })
+      return <div>count: {data}</div>
+    }
+
+    renderWithConfig(<Page />)
+
+    // hydration
+    screen.getByText('count:')
+
+    // mount
+    await screen.findByText('count: 0')
+
+    await act(() => advanceTimers(200)) // update
+    screen.getByText('count: 1')
+    await act(() => advanceTimers(50)) // no update
+    screen.getByText('count: 1')
+    await act(() => advanceTimers(150)) // update
+    screen.getByText('count: 2')
+  })
+```
+
+The second test was a bit more complex. It ensured that the data passed to `refetchInterval` was the latest data, and checked if the interval was modified dynamically as well.
+
+```tsx{7}
+  it('should pass updated data to refreshInterval', async () => {
+    let count = 1
+
+    const key = createKey()
+    function Page() {
+      const { data } = useSWR(key, () => count++, {
+        refreshInterval: updatedCount => updatedCount * 1000,
+        dedupingInterval: 100
+      })
+      return <div>count: {data}</div>
+    }
+
+    renderWithConfig(<Page />)
+
+    // hydration
+    screen.getByText('count:')
+
+    // mount
+    await screen.findByText('count: 1')
+
+    await act(() => advanceTimers(1000)) // updated after 1s
+    screen.getByText('count: 2')
+    await act(() => advanceTimers(1000)) // no update
+    screen.getByText('count: 2')
+    await act(() => advanceTimers(1000)) // updated after 2s
+    screen.getByText('count: 3')
+    await act(() => advanceTimers(2000)) // no update
+    screen.getByText('count: 3')
+    await act(() => advanceTimers(1000)) // updated after 3s
+    screen.getByText('count: 4')
+  })
+```
+The first version of this test made a false positive. To sum up, it was somewhat like `expect(true).toBe(true)`. That reminded me of the article [Make Your Test Fail](https://kentcdodds.com/blog/make-your-test-fail) from Kent.
+
+After I finished writing the tests, I wrote the minimum code to make all tests passed again. It was not a complex logic, but I needed to find where the updated data defined and where I could sneak my `if/else` in without breaking the hook. My second function should have checked the logic of the updated data for me, but it gave me fake confidence in its first version.
+
+Apart from the logic, I also tried to reuse the codebase as much as I could. While skimming through the core logic, I found some `isUndefined()` helper, so I assumed `isNumber()` should exist as well. It wasn't there, but I found `isFunction()` which was just as helpful. I also tried to mimic the code style, with comments above `if`, after `else`, and some newlines to separate logic.
+
+During the review, [Shu Ding](https://github.com/shuding), the maintainer, pointed out a case where the function could return 0, then `refetchInterval` should be disabled just like when using with a number. That was when we decided to add another test for the 0 case in a follow-up PR.
