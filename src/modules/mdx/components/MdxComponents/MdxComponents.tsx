@@ -2,6 +2,7 @@ import CustomLink from '../CustomLink/CustomLink';
 import MdxImage from '../MdxImage/MdxImage';
 import { MdxOrderedList, MdxUnorderedList } from '../MdxList/MdxList';
 import MdxListItem from '../MdxListItem/MdxListItem';
+import MdxQuote from '../MdxQuote/MdxQuote';
 import { MdxTypography } from '../MdxTypography/MdxTypography';
 import MdxVideo from '../MdxVideo/MdxVideo';
 
@@ -19,6 +20,7 @@ const MdxComponents = {
   ul: (props: any) => <MdxUnorderedList {...props} />,
   ol: (props: any) => <MdxOrderedList {...props} />,
   li: (props: any) => <MdxListItem {...props} />,
+  blockquote: MdxQuote,
   Video: MdxVideo,
 };
 

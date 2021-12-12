@@ -1,0 +1,126 @@
+---
+title: '[OSD600 Series] Release 0.4.3 - Contributing to the TypeScript'
+description: 'The largest codebase I have worked on so far' 
+thumbnail:
+  author: Sarah Lee
+  authorLink: https://unsplash.com/@hisarahlee?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+  width: 2400
+  height: 1600
+  url: /images/osd-600-release-0.4.3/hero.jpg
+isArchived: false
+publishedOn: 2021-12-12T10:40:00-0400
+tags:
+  - open-source
+  - osd600
+---
+
+## Table of Contents
+
+## Goals 🎉
+
+Check in week 3:
+- Contribute to Telescope ✅
+- Contribute to a React library ✅
+- Contribute to TypeScript ✅
+
+
+## Context
+
+[microsoft/TypeScript](https://github.com/microsoft/TypeScript) is a superset of JavaScript that compiles to clean JavaScript output.
+
+All this time, I was wondering how they tested a compiler. Spoiler: It was not rocket science, they just printed out the output and compared them each time. These were called "baseline", which was just a fancy word for jest snapshot.
+
+[Issue microsoft/TypeScript#46824](https://github.com/microsoft/TypeScript/issues/46824) suggests the compiler is showing some redudant errors on [private identifiers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields)
+
+
+[PR microsoft/TypeScript#47116](https://github.com/microsoft/TypeScript/pull/47116) address the issue.
+
+
+## Execution
+
+It was one heck of a debugging for such few line changes.
+
+
+### Research
+
+To start off, I spent like an hour reading the issue and still didn't know what exactly the changes should be. The mentioned function is relatively small.
+
+
+```ts
+function checkGrammarPrivateIdentifierExpression(privId: PrivateIdentifier): boolean {
+    if (!getContainingClass(privId)) {
+        return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+    }
+    if (!isExpressionNode(privId)) {
+        return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+    }
+    if (!getSymbolForPrivateIdentifierExpression(privId)) {
+        return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+    }
+    return false;
+}
+```
+
+To my surprise, the file is **45,000** lines long, with little to none comments. Github couldn't even show the file on its website, talking about best practices... However, it didn't mean there was no comments at all, the repo seemed to follow a self-documenting code style. Still, they used so many app-specific jargons that they still made no sense for someone who just got into the repo like me.
+
+To fight the panic, I used git to find recent changes to this function and read about the most recent [PR](https://github.com/microsoft/TypeScript/pull/44648) and its connected [issue](https://github.com/microsoft/TypeScript/issues/42574). This provided me some context about what this function `checkGrammarPrivateIdentifierExpression` does, it was checking the syntax for the new [private fields with `in` keyword](https://github.com/tc39/proposal-private-fields-in-in). There was an inspiring quote in the PR:
+
+> do the pragmatic thing' instead of the 'correct' thing
+
+I also digged into the [repo wiki](https://github.com/microsoft/TypeScript/wiki) which helped me understand some jargons they were using. I was distracted by their [Performance optimization](https://github.com/microsoft/TypeScript/wiki/Performance) though, really interesting if you work with TypeScript a lot.
+
+### Getting my hand dirty
+
+To sum up, if I re-read what [Nathan](https://github.com/sandersn) told me to do, the solution was literally what he said
+
+> for the second. For the first error, the check for "cannot find name {0}" in checkGrammarPrivateIdentifierExpression needs to also check that privId's parent isn't an in expression. In the same way, the check for "Private identifiers are only allowed in class bodies" should also check that privId's parent isn't a for...in statement. That should avoid the duplicated errors.
+
+
+But prior to figuring it out, it wasn't that clear, especially when I still had no clue how things worked under these wordy clean-looking functions. The debugger wasn't straightforward either, I could stop at a compiler code, but no way to track which line in the tests invoked it.
+
+And for the longest time, I thought these two `in` was the same to the compiler: 
+
+- `for (#field in v)`
+- `#field in v`
+
+I was barking on the wrong tree for a whole day. I was writing a whole essay for that, but at the end I realized it sounded wrong, so I went through the debugger again. On a side note, this style of [rubber duck debugging](https://rubberduckdebugging.com/) has saved me a lot of times. When I describe the problem as detailed as I can, I reconstruct my thoughts and see a bigger picture. 
+
+<Image width={906} height={826} src="/images/osd-600-release-0.4.3/debug.jpg" />
+
+In the end, I figured out the different between the two `in`. For this particular area of the code, I found it really easy to understand once you knew what all these "big words" were. All the helpers were there, I just had to put the check on the correct "node". See snippet for explanation
+
+```tsx
+// is the node inside a class? -> is private identifier used correctly? -> is the node defined?
+function checkGrammarPrivateIdentifierExpression(privId: PrivateIdentifier): boolean {
+    // Check if the node is inside a class
+    if (!getContainingClass(privId)) {
+        // Show the error "Private identifiers are not allowed outside class bodies"
+        return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+    }
+
+    // Check if the node is inside a `for...in` statement
+    // ... by checking its parent
+    if (!isForInStatement(privId.parent)) {
+        // Is the node (private identifier) used correctly
+        if (!isExpressionNode(privId)) {
+            // Show the error 
+            // ..."Private identifiers are only allowed in class bodies and may only be used 
+            // ... as part of a class member declaration property access 
+            // ... or on the left hand side of an in expression
+            return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+        }
+
+        // is the node inside a `#field in v` operator, by checking its parent
+        const isInOperation = isBinaryExpression(privId.parent) && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
+
+        // Check if the node is defined
+        if (!getSymbolForPrivateIdentifierExpression(privId) && !isInOperation) {
+          // Show the error "Cannot find name ${privId}"
+            return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+        }
+    }
+
+    // No error
+    return false;
+}
+```
