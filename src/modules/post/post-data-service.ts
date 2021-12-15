@@ -6,6 +6,7 @@ import path from 'path';
 import { getPostMeta, PostMeta } from './post-meta-service';
 import {
   assertFrontMatter,
+  filterPinnedPost,
   filterPostNotArchived,
   filterPublishedPost,
 } from './post-utils';
@@ -29,6 +30,7 @@ export type FrontMatter = {
   };
   publishedOn: string;
   isArchived: boolean;
+  isPinned?: boolean;
   tags: string[];
 };
 export type PostData = PostMatter & PostMeta;
@@ -51,6 +53,14 @@ export async function getAllPublishedPostData(): Promise<PostData[]> {
   const publishedPostDataList = postDataList.filter(filterPublishedPost);
 
   return publishedPostDataList;
+}
+
+export async function getAllPinnedPostData(): Promise<PostData[]> {
+  const postSlugs = getAllPostSlugs();
+  const postDataList = await Promise.all(postSlugs.map(getPostDataFromSlug));
+  const pinnedPostDataList = postDataList.filter(filterPinnedPost);
+
+  return pinnedPostDataList;
 }
 export async function getPostDataFromSlug(postSlug: string): Promise<PostData> {
   const postMatter = await getPostMatter(postSlug);

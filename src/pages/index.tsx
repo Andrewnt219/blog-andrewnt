@@ -13,12 +13,13 @@ import {
   latestPostsQuery,
   useQueryLatestPosts,
 } from '@modules/homepage/hooks/useQueryLatestPosts';
-import { popularPostsQuery } from '@modules/homepage/hooks/useQueryPopularPosts';
+import { pinnedPostsQuery, useQueryPinnedPosts } from '@modules/homepage/hooks/useQueryPinnedPosts';
+import { popularPostsQuery, useQueryPopularPosts } from '@modules/homepage/hooks/useQueryPopularPosts';
 import {
   getAllPublishedPostData,
   PostData,
 } from '@modules/post/post-data-service';
-import { filterPostData } from '@modules/post/post-utils';
+import { filterPinnedPost, filterPostData } from '@modules/post/post-utils';
 import generateRss from '@modules/rss/generate-rss';
 import LoadingIndicator from '@ui/LoadingIndicator/LoadingIndicator';
 import Pagination from '@ui/Pagination/Pagination';
@@ -42,6 +43,9 @@ export default function Home({ data: initialData, error: serverError }: Props) {
   // const popularPostsQuery = useQueryPopularPosts(
   //   initialData?.popularPostsResult
   // );
+  const pinnedPostsQuery = useQueryPinnedPosts(
+    initialData?.pinnedPostsResult
+  );
 
   function onPageChange(
     ev: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -55,12 +59,25 @@ export default function Home({ data: initialData, error: serverError }: Props) {
 
   return (
     <>
+      <WithDataFetching
+        error={getFirstErrorMessage([serverError, pinnedPostsQuery.error])}
+        data={pinnedPostsQuery.data}
+      >
+        {(data) => (
+          <section aria-label="Pinned posts">
+            <SectionHeader title="Pinned posts" subTitle="Highlights" />
+
+            <PostPreviewCardList posts={data.items} />
+          </section>
+        )}
+      </WithDataFetching>
+
       {/* <WithDataFetching
         error={getFirstErrorMessage([serverError, popularPostsQuery.error])}
         data={popularPostsQuery.data}
       >
         {(data) => (
-          <section aria-label="Popular posts">
+          <section aria-label="Popular posts" tw="mt-2xl">
             <SectionHeader title="Popular" subTitle="Trending articles" />
 
             <PostPreviewCardList posts={data.items} />
@@ -104,7 +121,8 @@ export default function Home({ data: initialData, error: serverError }: Props) {
 
 type StaticProps = Result<{
   latestPostsResult: PaginateResult<PostData>;
-  popularPostsResult: PaginateResult<PostData>;
+  // popularPostsResult: PaginateResult<PostData>;
+  pinnedPostsResult: PaginateResult<PostData>;
 }>;
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
@@ -115,16 +133,21 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
       cloneDeep(allPostData),
       latestPostsQuery
     );
-    const popularPostsResult = filterPostData(
-      cloneDeep(allPostData),
-      popularPostsQuery
+    // const popularPostsResult = filterPostData(
+    //   cloneDeep(allPostData),
+    //   popularPostsQuery
+    // );
+    const pinnedPostsResult = filterPostData(
+      cloneDeep(allPostData.filter(filterPinnedPost)),
+      pinnedPostsQuery
     );
 
     return {
       revalidate: 60,
       props: createResultSuccess({
         latestPostsResult,
-        popularPostsResult,
+        // popularPostsResult,
+        pinnedPostsResult
       }),
     };
   } catch (error) {

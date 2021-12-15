@@ -46,9 +46,14 @@ export function filterPublishedPost(postMatter: PostMatter) {
   return filterScheduledPost(postMatter) && filterPostNotArchived(postMatter);
 }
 
+export function filterPinnedPost(postMatter: PostMatter) {
+  return filterPublishedPost(postMatter) && postMatter.isPinned;
+}
+
 export function filterPostNotArchived(postMatter: PostMatter) {
   return !postMatter.isArchived;
 }
+
 
 export function filterScheduledPost(postMatter: PostMatter) {
   return dayjs(postMatter.publishedOn).isBefore(new Date());
